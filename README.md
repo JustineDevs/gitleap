@@ -114,3 +114,47 @@ Enterprise engineers and local AI agents need these packs to be small and fast. 
 ## The Resulting System Behavior
 When applied to a massive enterprise project, the engine behaves less like a basic translator and more like an automated architectural extraction factory. [2] 
 A 5GB enterprise codebase containing chaotic, decades-old code is parsed asynchronously. Within a minute, it is compressed into a clean, 15MB zipped collection of 10-15 perfectly refactored canonical skill directories, ready for any developer or AI teammate to download and run locally. [8] 
+
+## The Architecture Block Diagram
+```
+[ User Browser / AI Client ]
+             │
+             ▼ (GET ://gitleap.com)
+┌────────────────────────────────────────────────────────┐
+│ 1. INGRESS & EDGE CACHE                                │
+│    Validates URL, checks Redis for an existing Pack.   │
+└────────────────────────────┬───────────────────────────┘
+                             │ (Cache Miss ➔ Push Event)
+                             ▼
+┌────────────────────────────────────────────────────────┐
+│ 2. ASYNCHRONOUS EVENT QUEUE (RabbitMQ / NATS)          │
+│    Absorbs traffic spikes; distributes processing jobs.│
+└────────────────────────────┬───────────────────────────┘
+                             │
+                             ▼
+┌────────────────────────────────────────────────────────┐
+│ 3. PIPES & FILTERS WORKER ENGINE                       │
+│    Step A: Stream Tarball ➔ Step B: AST Structural Map │
+│    ➔ Step C: AI Module Slicing ➔ Step D: Code Refactor │
+└────────────────────────────┬───────────────────────────┘
+                             │ (Compilation Complete)
+                             ▼
+┌────────────────────────────────────────────────────────┐
+│ 4. DISKLESS COMPRESSED STREAMER                        │
+│    Generates manifests, bundles files, streams .tar.gz │
+└────────────────────────────────────────────────────────┘
+```
+
+### The 4 Behavioral Stages of GitLeapStage 
+- 1: The Ingress Edge Check (Instant Response)
+> [!NOTE]
+> What happens: The HTTP Ingress Gateway intercepts the request. It extracts the repository organization, name, and target commit hash from the URL path.The System Behavior: It immediately checks a global Redis distributed cache.If a matching commit hash exists: It instantly redirects the browser or AI agent to a pre-compiled download stream. The entire transaction takes under 50 milliseconds.If a cache miss occurs: It registers a new unique tracking ID, submits a Repo.Processing event into the asynchronous queue, and returns an HTTP 202 Accepted status to stream a real-time progress page via WebSockets.
+- Stage 2: The Map-Reduce AST Slicing (Deep Structural Parsing)
+> [!NOTE]
+> What happens: An isolated worker service consumes the event, streams the repository's source tarball directly via the GitHub API, and untars it into an in-memory execution volume.The System Behavior: The engine uses Tree-sitter static analysis to index the codebase language targets. It maps out dependencies, function blocks, and entry points, while completely dropping non-functional code (docs, asset assets, configurations).The Enterprise Scaling Behavior: If the repository is massive, the system splits the AST tree into decoupled sub-modules. Each module is sent out in parallel to separate AI worker threads to bypass context limits.
+- Stage 3: The Parallel Refactoring Engine (The Ingestion Filter)
+> [!NOTE]
+> What happens: The AI Worker pool processes the isolated code files through a series of deterministic engineering rules.The System Behavior: It feeds each capability block to an LLM context window with strict system prompts: Strip out platform-specific hacks, optimize variable names, align package dependencies, and output a pristine implementation file. Simultaneously, it generates a localized integration test (validation.test) to guarantee that the output can assert itself locally.
+- Stage 4: The Clean Archive Compilation (The Delivery)
+> [!NOTE]
+> What happens: The Compilation service aggregates all the independently refactored module blocks back into a single pipeline.The System Behavior: It auto-synthesizes the machine-readable skills-manifest.json and the Anthropic-ready SKILL.md file based on the extracted capabilities. It injects a localized universal setup.sh and run-skill.sh script, zips the entire structure into a streaming .tar.gz object buffer, updates the Redis cache state, and signals the WebSocket to trigger the instant download for the user.
