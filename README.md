@@ -196,3 +196,76 @@ A sudden wave of traffic from a viral launch can quickly exhaust your GitHub API
 | AI Hallucinations | Auto-linting and code compilation self-correction loops. | Error-free, verified downloadable packs. |
 | High Operational Costs | Pre-AI context pruning and Map-Reduce slicing. | Highly profitable, scalable business margin. |
 | API Rate Limiting | Commit-hash caching and distributed request queues. | Reliable, continuous platform uptime. |
+
+------------------------------
+## 1. The Global Architecture Workflow
+backend remains exactly the same—a distributed, event-driven, text-parsing engine. The only change is that instead of streaming pipeline logs via WebSockets to a heavy React web app, your backend handles light JSON payloads over an optimized API or gRPC gateway directly to a terminal binary (gitleap).
+```
+[ Developer Terminal ] ──(gitleap pipeline URL)──► [ Minimal Web Landing Page (OAuth) ]
+         │                                                      │
+         ▼ (JSON Stream via API / gRPC)                         ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ GITLEAP BACKEND WORKERS                                                │
+│ Ingests Repo ➔ Parses AST ➔ Refactors via AI ➔ Streams Tarball Stream │
+└────────────────────────────────────────────────────────────────────────┘
+```
+------------------------------
+## 2. The Web Landing Page & Onboarding (Ultra-Minimal)
+The website (gitleap.com) serves only two functions:
+
+   1. The Pitch: A clean, terminal-themed landing page explaining the concept.
+   2. The Handshake (Auth): A single "Login with GitHub" OAuth button. Once authenticated, the site provides a secure API Token and displays a single command to get started:
+
+```curl -sL https://gitleap.com | sh && gitleap auth login <token>```
+
+------------------------------
+## 3. The [Rezi](https://github.com/RtlZeroMemory/Rezi) TUI User Interactive Experience
+Once installed, the user never needs to leave their terminal. The user interactive flow feels lightning-fast, reactive, and keyboard-driven. [2] 
+## Step A: Initiating the Leap
+Instead of swapping a domain in a browser, a developer passes any public GitHub repository URL directly to the CLI client:
+
+$ gitleap pull https://github.com/user/repo
+
+## Step B: The Live TUI Ingestion Pipeline
+The client instantly initializes a rich, interactive terminal canvas (built using modern TUI libraries like Bubble Tea or Blessed). The pipeline progress animates smoothly in place using distinct visual anchors: [3, 4] 
+``` example
+ 🧭 GitLeap Pipeline: e2b-dev/e2b-cookbook
+ ──────────────────────────────────────────────────────────────────────
+ [████████████████░░░░░░░░░░░░░░░░░░] 45% Refactoring Codebase Primitives
+ ──────────────────────────────────────────────────────────────────────
+ 🖥️  [DONE] Ingested repository source stream.
+ 🌳  [DONE] Tree-sitter built abstract syntax tree (AST).
+ 🧠  [BUSY] Map-Reduce AI processing: Refactoring module 2 of 4...
+ 📦  [WAIT] Synthesizing skills-manifest.json configuration.
+ ──────────────────────────────────────────────────────────────────────
+ (Press Esc to abort and cancel background worker)
+```
+
+## Step C: The Interactive Skills Explorer View
+Once compilation reaches 100%, the screen clears, and the user is dropped into an interactive, multi-pane terminal split. They navigate it smoothly using their arrow keys or Vim hotkeys (j/k).
+``` example
+ GitLeap Explorer ── e2b-dev/e2b-cookbook ─────────────────── (q: exit / d: download)
+ ┌──────────────────────────────────┐┌─────────────────────────────────────────────────┐
+ │ Selected Skills (Use Arrows)     ││ Skill Schema: e2b_data_analyst                  │
+ │                                  ││                                                 │
+ │ 🔹 [01] e2b_data_analyst        ││ Runs an isolated code interpreter to parse CSV  │
+ │ 🔹 [02] mcp_research_agent       ││ datasets and auto-generate clean visualizations.│
+ │ 🔹 [03] langchain_interpreter    ││                                                 │
+ │ 🔹 [04] browserbase_automation   ││ Target: .agents/skills/01_data_analyst/canonical.py   │
+ │                                  ││ Required Env Keys:                              │
+ │                                  ││   - E2B_API_KEY                                 │
+ │                                  ││   - OPENAI_API_KEY                              │
+ └──────────────────────────────────┘└─────────────────────────────────────────────────┘
+ ┌─────────────────────────────────────────────────────────────────────────────────────┐
+ │ Code Blueprint Preview (Read-Only)                                                  │
+ │ 34  const sandbox = await Sandbox.create();                                         │
+ │ 35  try {                                                                           │
+ │ 36    const execution = await sandbox.commands.run(`python -c "${code_snippet}"`);  │
+ └─────────────────────────────────────────────────────────────────────────────────────┘
+ [d] Download Archive  [i] Inject directly into active project  [ctrl+c] Abort
+```
+------------------------------
+## 4. The Final Delivery & Execution Action
+> When the developer hits d (Download) or i (Inject), the client downloads the optimized .tar.gz data payload from the backend cache and unpacks it right into their current local working directory.
+The output matches your exact vision: the pristine /skills folder, the universal run-skill.sh script, and the machine-readable skills-manifest.json are immediately ready to use. If an AI coding assistant (like Claude Code) is open in that same terminal workspace, it immediately smells the newly added manifest file and inherits those advanced capabilities on the spot.
+------------------------------
