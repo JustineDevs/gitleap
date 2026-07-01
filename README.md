@@ -7,7 +7,7 @@ GitLeap redefines how developers consume open-source software by shifting the pa
 When a user initiates the URL swap **(://github.com... ➔ ://gitleap.com...)**, the system splits the heavy structural analysis and AI code refactoring into isolated, asynchronous execution stages.
 
 ```
-📦 [SKILLS]/
+📦 .agents/[SKILLS]/
 ├── 📝 SKILL.md                 # Highly optimized semantic guide matching skills.sh standard
 ├── ⚙️ skills-manifest.json      # Machine-readable schema mapping all canonical tools for Cursor/Claude Code
 ├── 🚀 setup.sh                 # Zero-config script installing necessary SDKs and lockfile environments
