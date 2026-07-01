@@ -4,6 +4,8 @@ GitLeap redefines how developers consume open-source software by shifting the pa
 >[!NOTE]
 >Turn any chaotic GitHub repository into a curated, downloadable Skills Collection with a single URL swap. Stop wasting hours auditing messy enterprise codebases or fighting out-of-date package lockfiles. GitLeap acts as an expert systems engineer that processes any repo on-the-fly, generating a token-optimized, structurally perfect bundle that your local IDE and AI code assistants (like Cursor and Claude Code) can ingest and execute immediately."
 
+When a user initiates the URL swap **(://github.com... ➔ ://gitleap.com...)**, the system splits the heavy structural analysis and AI code refactoring into isolated, asynchronous execution stages.
+
 ```
 📦 [SKILLS]/
 ├── 📝 SKILL.md                 # Highly optimized semantic guide matching skills.sh standard
