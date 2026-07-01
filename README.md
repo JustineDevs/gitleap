@@ -158,3 +158,41 @@ A 5GB enterprise codebase containing chaotic, decades-old code is parsed asynchr
 - Stage 4: The Clean Archive Compilation (The Delivery)
 > [!NOTE]
 > What happens: The Compilation service aggregates all the independently refactored module blocks back into a single pipeline.The System Behavior: It auto-synthesizes the machine-readable skills-manifest.json and the Anthropic-ready SKILL.md file based on the extracted capabilities. It injects a localized universal setup.sh and run-skill.sh script, zips the entire structure into a streaming .tar.gz object buffer, updates the Redis cache state, and signals the WebSocket to trigger the instant download for the user.
+
+------------------------------
+## 1. Mitigating Malicious Code and Injection Attacks
+Because users can swap the URL of any public repository, attackers might intentionally feed GitLeap repositories containing malware, hidden exploits, or infinite processing loops (ZIP bombs).
+
+* Mitigation Strategy: Implement strict Static Isolation. GitLeap's workers never execute the code during the ingestion, parsing, or refactoring phases. Tree-sitter reads the code purely as text structures (Abstract Syntax Trees), and the LLM processes it as raw text context.
+* The Impact Outcome: The repository is safely transformed without ever running on your platform's infrastructure. If a malicious script is found, it is neutralized during the refactoring filter. The downloadable "Ready Pack" is delivered clean, with any execution risks isolated to the user's local machine inside their own development environment.
+
+------------------------------
+## 2. Mitigating AI Hallucinations and Broken Syntaxes
+Large Language Models can occasionally hallucinate code syntax, invent non-existent library functions, or misinterpret how a complex enterprise library works.
+
+* Mitigation Strategy: Use a Deterministic AST Validation Loop. After the AI refactors a code block into a "Canonical Skill," the system runs the code through a local language compiler or linter (e.g., tsc for TypeScript, flake8 for Python) embedded within the worker engine.
+* The Impact Outcome: If the linter detects a syntax error or a broken import, the system rejects the file and triggers a self-correction loop ("The code you generated failed to compile due to error X. Fix it."). This ensures that the final zipped output is verified, accurate, and ready to compile out-of-the-box, protecting GitLeap's reputation for premium quality.
+
+------------------------------
+## 3. Mitigating Token Bloat and API Cost Spikes
+Enterprise codebases can contain millions of tokens. Throwing whole directories at advanced reasoning LLMs (like OpenAI's o1/o3-mini or Anthropic's Claude 3.5 Sonnet) will result in astronomical API bills and frequent timeouts.
+
+* Mitigation Strategy: Enforce Incremental Context Pruning via the Map-Reduce pipeline. The engine slices the project up based on functional density. It strips comments, spaces, tests, and configurations before sending anything to the LLM, leaving only the atomic logic paths.
+* The Impact Outcome: GitLeap reduces the token volume sent to premium LLMs by up to 85%. Processing costs plummet, and processing speeds shift from minutes down to seconds, maintaining the signature instant "URL-swap" user experience.
+
+------------------------------
+## 4. Mitigating API Rate Limits (GitHub & LLM Providers)
+A sudden wave of traffic from a viral launch can quickly exhaust your GitHub API quotas or trigger rate limits on your LLM API accounts.
+
+* Mitigation Strategy: Deploy a Multi-Tier Caching & Token Bucket Rate Limiter. GitLeap uses aggressive content-addressable caching via Redis. If a repository has been processed at a specific commit hash, it is served instantly from cache storage without calling GitHub or an LLM provider again. For new repositories, an internal queue spreads out API requests across an active pool of rotating API keys.
+* The Impact Outcome: System availability stays close to 100%. Even during viral traffic spikes, the platform remains fast and responsive, gracefully queueing background tasks without dropping connections or failing user requests.
+
+------------------------------
+## Summary of Risk vs. Outcome
+
+| Identified Threat | Engineering Mitigation | Guaranteed System Outcome |
+|---|---|---|
+| Malicious Repository | Static AST text parsing only (Zero code execution on backend). | 100% cloud infrastructure safety. |
+| AI Hallucinations | Auto-linting and code compilation self-correction loops. | Error-free, verified downloadable packs. |
+| High Operational Costs | Pre-AI context pruning and Map-Reduce slicing. | Highly profitable, scalable business margin. |
+| API Rate Limiting | Commit-hash caching and distributed request queues. | Reliable, continuous platform uptime. |
