@@ -13,9 +13,9 @@ When a user initiates the URL swap **(://github.com... ➔ ://gitleap.com...)**,
 ├── 🚀 setup.sh                 # Zero-config script installing necessary SDKs and lockfile environments
 └── 📂 skills/                  # Pristine, isolated code primitives stripped of junk, legacy examples, or logs
     │
-    ├── 🔹 01_data_analyst/
-    │   ├── canonical_agent.py  # Production-grade Python code interpreter following o1/o3-mini best practices
-    │   ├── config.env.example  # Cleansed env matrix requesting strictly: E2B_API_KEY & OPENAI_API_KEY
+    ├── 🔹 01_data_analyst/  
+    │   ├── canonical_agent.py  # Production-grade Python code interpreter following o1/o3-mini best practices  
+    │   ├── config.env.example  # Cleansed env matrix requesting strictly: <SANDBOX_PROVIDER>_API_KEY & OPENAI_API_KEY  
     │   └── local_verify.test.py# Auto-generated assertion test running a mock CSV interpretation test
     │
     ├── 🔹 02_mcp_research_agent/
@@ -228,40 +228,40 @@ $ gitleap pull https://github.com/user/repo
 
 ## Step B: The Live TUI Ingestion Pipeline
 The client instantly initializes a rich, interactive terminal canvas (built using modern TUI libraries like Bubble Tea or Blessed). The pipeline progress animates smoothly in place using distinct visual anchors: [3, 4] 
-``` example
- 🧭 GitLeap Pipeline: e2b-dev/e2b-cookbook
- ──────────────────────────────────────────────────────────────────────
- [████████████████░░░░░░░░░░░░░░░░░░] 45% Refactoring Codebase Primitives
- ──────────────────────────────────────────────────────────────────────
- 🖥️  [DONE] Ingested repository source stream.
- 🌳  [DONE] Tree-sitter built abstract syntax tree (AST).
- 🧠  [BUSY] Map-Reduce AI processing: Refactoring module 2 of 4...
- 📦  [WAIT] Synthesizing skills-manifest.json configuration.
- ──────────────────────────────────────────────────────────────────────
+``` example  
+ 🧭 GitLeap Pipeline: https://github.com/<org>/repo
+ ──────────────────────────────────────────────────────────────────────  
+ [████████████████░░░░░░░░░░░░░░░░░░] 45% Refactoring Codebase Primitives  
+ ──────────────────────────────────────────────────────────────────────  
+ 🖥️  [DONE] Ingested repository source stream.  
+ 🌳  [DONE] Tree-sitter built abstract syntax tree (AST).  
+ 🧠  [BUSY] Map-Reduce AI processing: Refactoring module 2 of 4...  
+ 📦  [WAIT] Synthesizing skills-manifest.json configuration.  
+ ──────────────────────────────────────────────────────────────────────  
  (Press Esc to abort and cancel background worker)
 ```
 
 ## Step C: The Interactive Skills Explorer View
 Once compilation reaches 100%, the screen clears, and the user is dropped into an interactive, multi-pane terminal split. They navigate it smoothly using their arrow keys or Vim hotkeys (j/k).
 ``` example
- GitLeap Explorer ── e2b-dev/e2b-cookbook ─────────────────── (q: exit / d: download)
- ┌──────────────────────────────────┐┌─────────────────────────────────────────────────┐
- │ Selected Skills (Use Arrows)     ││ Skill Schema: e2b_data_analyst                  │
- │                                  ││                                                 │
- │ 🔹 [01] e2b_data_analyst        ││ Runs an isolated code interpreter to parse CSV  │
- │ 🔹 [02] mcp_research_agent       ││ datasets and auto-generate clean visualizations.│
- │ 🔹 [03] langchain_interpreter    ││                                                 │
- │ 🔹 [04] browserbase_automation   ││ Target: .agents/skills/01_data_analyst/canonical.py   │
- │                                  ││ Required Env Keys:                              │
- │                                  ││   - E2B_API_KEY                                 │
- │                                  ││   - OPENAI_API_KEY                              │
- └──────────────────────────────────┘└─────────────────────────────────────────────────┘
- ┌─────────────────────────────────────────────────────────────────────────────────────┐
- │ Code Blueprint Preview (Read-Only)                                                  │
- │ 34  const sandbox = await Sandbox.create();                                         │
- │ 35  try {                                                                           │
- │ 36    const execution = await sandbox.commands.run(`python -c "${code_snippet}"`);  │
- └─────────────────────────────────────────────────────────────────────────────────────┘
+ GitLeap Explorer ── <org>/<example-repo> ─────────────────── (q: exit / d: download)  
+ ┌──────────────────────────────────┐┌─────────────────────────────────────────────────┐  
+ │ Selected Skills (Use Arrows)     ││ Skill Schema: data_analyst                      │  
+ │                                  ││                                                 │  
+ │ 🔹 [01] data_analyst            ││ Runs an isolated code interpreter to parse CSV  │  
+ │ 🔹 [02] mcp_research_agent       ││ datasets and auto-generate clean visualizations.│  
+ │ 🔹 [03] langchain_interpreter    ││                                                 │  
+ │ 🔹 [04] browserbase_automation   ││ Target: .agents/skills/01_data_analyst/canonical.py   │  
+ │                                  ││ Required Env Keys:                              │  
+ │                                  ││   - <SANDBOX_PROVIDER>_API_KEY                  │  
+ │                                  ││   - OPENAI_API_KEY                              │  
+ └──────────────────────────────────┘└─────────────────────────────────────────────────┘  
+ ┌─────────────────────────────────────────────────────────────────────────────────────┐  
+ │ Code Blueprint Preview (Read-Only)                                                  │  
+ │ 34  const sandbox = await Sandbox.create();                                         │  
+ │ 35  try {                                                                           │  
+ │ 36    const execution = await sandbox.commands.run(`python -c "${code_snippet}"`);  │  
+ └─────────────────────────────────────────────────────────────────────────────────────┘  
  [d] Download Archive  [i] Inject directly into active project  [ctrl+c] Abort
 ```
 ------------------------------
