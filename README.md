@@ -37,7 +37,7 @@ When a user initiates the URL swap **(://github.com... ➔ ://gitleap.com...)**,
 ```
 [ A messy, unstructured GitHub repository URL ]
                        │
-                       ▼ (User changes domain to yourskillfactory.com)
+                       ▼ (gitleap.com)
 ┌────────────────────────────────────────────────────────────────────────┐
 │ 1. THE INGESTION LAYER                                                 │
 │    Streams raw code, scripts, and documentation into the pipeline.     │
