@@ -245,24 +245,25 @@ The client instantly initializes a rich, interactive terminal canvas (built usin
 Once compilation reaches 100%, the screen clears, and the user is dropped into an interactive, multi-pane terminal split. They navigate it smoothly using their arrow keys or Vim hotkeys (j/k).
 ``` example
  GitLeap Explorer ── <org>/<example-repo> ─────────────────── (q: exit / d: download)  
- ┌──────────────────────────────────┐┌─────────────────────────────────────────────────┐  
- │ Selected Skills (Use Arrows)     ││ Skill Schema: data_analyst                      │  
- │                                  ││                                                 │  
- │ 🔹 [01] data_analyst            ││ Runs an isolated code interpreter to parse CSV  │  
- │ 🔹 [02] mcp_research_agent       ││ datasets and auto-generate clean visualizations.│  
- │ 🔹 [03] langchain_interpreter    ││                                                 │  
- │ 🔹 [04] browserbase_automation   ││ Target: .agents/skills/01_data_analyst/canonical.py   │  
- │                                  ││ Required Env Keys:                              │  
- │                                  ││   - <SANDBOX_PROVIDER>_API_KEY                  │  
- │                                  ││   - OPENAI_API_KEY                              │  
- └──────────────────────────────────┘└─────────────────────────────────────────────────┘  
- ┌─────────────────────────────────────────────────────────────────────────────────────┐  
- │ Code Blueprint Preview (Read-Only)                                                  │  
- │ 34  const sandbox = await Sandbox.create();                                         │  
- │ 35  try {                                                                           │  
- │ 36    const execution = await sandbox.commands.run(`python -c "${code_snippet}"`);  │  
- └─────────────────────────────────────────────────────────────────────────────────────┘  
- [d] Download Archive  [i] Inject directly into active project  [ctrl+c] Abort
+[ Skills ]  Schema Config   Blueprint Engine   System Diagnostics
+╭─ Skills List (4 Cols) ────╮╭─ Schema Detail (8 Cols) ────────────────────────╮
+│ ❯ 🔹 code-slicing         ││ ⚙ Object Model: skill-manifest.json              │
+│   🔹 ast-refactor         ││   ├─ Capability Tag: [ SKILL ]                  │
+│   🔹 telemetry-agent      ││   ├─ Entry Point: src/skills/slicing.ts         │
+│   🔹 pipeline-router      ││   ╰─ AST Mode: Strict Compilation Parsing       │
+│                           ││                                                 │
+│ 📂 core/                  ││ System Metrics:                                 │
+│   🔹 token-engine.ts      ││ ░░░░░░░░░░░░░████████▓▓▓▒▒░░░░░░░░░░░░░░░░░░░   │
+│   🔹 grid-canvas.ts       ││ Transmuting AST Nodes: 12,408 / 18,900 [65%]     │
+╰───────────────────────────╯╰─────────────────────────────────────────────────╯
+╭─ Code Blueprint Preview (Collapsible) ───────────────────────────────────────╮
+│ 1 │ export function calculateSheenStep(tickCounter: number): SheenState {    │
+│ 2 │   const normalizedPeriod = SHEEN_CONFIG.SHEEN_MAX;                       │
+│ 3 │   const currentStep = (tickCounter * SHEEN_CONFIG.SHEEN_SPEED);          │
+│ 4 │   return { sheenCenter: currentStep % normalizedPeriod };                │
+│ 5 │ }                                                                        │
+╰──────────────────────────────────────────────────────────────────────────────╯
+[d] Download Archive  │  [i] Inject into Active Project  │  [Ctrl+C] Abort │  ↕ / j/k Nav  │  c Toggle Preview
 ```
 ------------------------------
 ## 4. The Final Delivery & Execution Action
