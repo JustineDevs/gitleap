@@ -227,7 +227,7 @@ Instead of swapping a domain in a browser, a developer passes any public GitHub 
 $ gitleap pull https://github.com/user/repo
 
 ## Step B: The Live TUI Ingestion Pipeline
-The client instantly initializes a rich, interactive terminal canvas (built using modern TUI libraries like Bubble Tea or Blessed). The pipeline progress animates smoothly in place using distinct visual anchors: [3, 4] 
+The client instantly initializes a rich, interactive terminal canvas (built using the [Rezi](https://github.com/RtlZeroMemory/Rezi) TUI library). The pipeline progress animates smoothly in place using distinct visual anchors
 ``` example  
  🧭 GitLeap Pipeline: https://github.com/<org>/repo
  ──────────────────────────────────────────────────────────────────────  
