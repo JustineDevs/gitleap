@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "skills": {
+    "add-compat-flag": {
+      "source": "cloudflare/workerd",
+      "sourceType": "github",
+      "skillPath": ".opencode/skills/add-compat-flag/SKILL.md",
+      "computedHash": "7b693d845cc70b73f75580359292a18688d8ac90041f2972841f793cc48e0109"
+    },
+    "advisor-orchestrator-worker": {
+      "source": "shubhamsaboo/awesome-llm-apps",
+      "sourceType": "github",
+      "skillPath": "agent_skills/advisor-orchestrator-worker/SKILL.md",
+      "computedHash": "814b0d4ccd47c52a5d02947e2c127bf8eb2c0f4c90ed9297a79b6ff5fa36ff64"
+    },
+    "ai-pipeline-orchestration": {
+      "source": "bagelhole/devops-security-agent-skills",
+      "sourceType": "github",
+      "skillPath": "devops/ai/ai-pipeline-orchestration/SKILL.md",
+      "computedHash": "3f5785d1eac2598980f5a099534c256b60a35c53f9ce79128a2192b715f34b9a"
+    },
+    "api-rate-limiting": {
+      "source": "aj-geddes/useful-ai-prompts",
+      "sourceType": "github",
+      "skillPath": "skills/api-rate-limiting/SKILL.md",
+      "computedHash": "eea9d86f19e720a41f0187a5b3057daea56bf67ba07697e84fb341ebc7468bd0"
+    },
+    "ast-grep-outline": {
+      "source": "ast-grep/agent-skill",
+      "sourceType": "github",
+      "skillPath": "ast-grep/skills/outline/SKILL.md",
+      "computedHash": "688ee8a93a82da5788b733c06d899d7e0f0b5d5e5e8b40356054f7afa33ed69c"
+    },
+    "building-tui-apps": {
+      "source": "mhagrelius/dotfiles",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/building-tui-apps/SKILL.md",
+      "computedHash": "5c14d412572dc7d713d298760aedfbc8473cd257740a12b7468ffd5f14461e43"
+    },
+    "caching-strategies": {
+      "source": "erichowens/some_claude_skills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/caching-strategies/SKILL.md",
+      "computedHash": "a5f415e6c8a95b0f6613cd8c9491bc91e8971b6322812db4e8b7c4a35819fbbd"
+    },
+    "dev-context-multi-repo": {
+      "source": "vasilyu1983/ai-agents-public",
+      "sourceType": "github",
+      "skillPath": "frameworks/shared-skills/skills/dev-context-multi-repo/SKILL.md",
+      "computedHash": "a9aaca9017b807c20aff0081fa54643db8ef3b271e6836c1f9fc556047812c33"
+    },
+    "docker-compose-production": {
+      "source": "thebushidocollective/han",
+      "sourceType": "github",
+      "skillPath": "plugins/tools/docker-compose/skills/docker-compose-production/SKILL.md",
+      "computedHash": "419c5617fecea84e43850e918344b365b784d4d40f5b2ad8d8b47655de2963fd"
+    },
+    "docker-management": {
+      "source": "bagelhole/devops-security-agent-skills",
+      "sourceType": "github",
+      "skillPath": "devops/containers/docker-management/SKILL.md",
+      "computedHash": "0f8eebbca92496c7dab4ab727fa6b66c309b4b7a01d82dce6a929ba9afb1e6d8"
+    },
+    "docker-storage": {
+      "source": "full-stack-skills/docker-skills",
+      "sourceType": "github",
+      "skillPath": "skills/docker-storage/SKILL.md",
+      "computedHash": "eb0d1bd6e3655f8baa2f8f8eca2e47cd452daf6e656a0334bd6f2ee1fe0ae1dd"
+    },
+    "docker-volumes": {
+      "source": "pluginagentmarketplace/custom-plugin-docker",
+      "sourceType": "github",
+      "skillPath": "skills/docker-volumes/SKILL.md",
+      "computedHash": "6b771239f2a148d03959c2c8c315057d7c85ea398f0de7f8144f552634f8f278"
+    },
+    "embedding-optimization": {
+      "source": "ancoleman/ai-design-components",
+      "sourceType": "github",
+      "skillPath": "skills/embedding-optimization/SKILL.md",
+      "computedHash": "06ad9cbc78bf399f101ddf1887a35df1c319892bbc233a7c479c50a7f904263d"
+    },
+    "file-upload-and-ssrf": {
+      "source": "mn-youssef/security-skills",
+      "sourceType": "github",
+      "skillPath": "skills/file-upload-and-ssrf/SKILL.md",
+      "computedHash": "f39405421e6085e737e0944989a49126a3dcde1397b72ffb051d5c5b6b8758e1"
+    },
+    "gitignore": {
+      "source": "ravindra-gadekar/fullstack-dev",
+      "sourceType": "github",
+      "skillPath": "skills/gitignore/SKILL.md",
+      "computedHash": "99ed9a14bbc278d2fb7604e8ce42fd6b4ef82327fb23a32755082b557330bef6"
+    },
+    "implementing-realtime-sync": {
+      "source": "ancoleman/ai-design-components",
+      "sourceType": "github",
+      "skillPath": "skills/implementing-realtime-sync/SKILL.md",
+      "computedHash": "e31ded1e4c1387122d31a7e61fc595154e9348b569a812f0a5b3bace50a5a45d"
+    },
+    "lightning-sandboxes": {
+      "source": "lightning-ai/skills",
+      "sourceType": "github",
+      "skillPath": "lightning-sandboxes/SKILL.md",
+      "computedHash": "55b960cf3d13be433ac1182391f0291d3761ec479a2bbe26941df416ce003b2a"
+    },
+    "llm-inference-scaling": {
+      "source": "bagelhole/devops-security-agent-skills",
+      "sourceType": "github",
+      "skillPath": "infrastructure/local-ai/llm-inference-scaling/SKILL.md",
+      "computedHash": "80c4216ee937a93da7330979d92b423a242b664624954b12c957aa63e8590191"
+    },
+    "malicious-behavior": {
+      "source": "sendx/email-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ESP-malicious-behavior-SKILL/SKILL.md",
+      "computedHash": "dcb69b7ebc95b27a00fed94b60ce9d51a59253040ac1cd59a91ef0ce11efd5e6"
+    },
+    "memory-optimize": {
+      "source": "kochetkov-ma/claude-brewcode",
+      "sourceType": "github",
+      "skillPath": "skills/memory-optimize/SKILL.md",
+      "computedHash": "0ac3424e1fb8001f72b75f1b4bbe6290fe6635037d23d4e638d30ca33a5893b9"
+    },
+    "multi-tenant-architecture": {
+      "source": "mblode/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/multi-tenant-architecture/SKILL.md",
+      "computedHash": "896a23b94231b4b3d0e487c59731ed19d32c7b13934d4e602104188143e79340"
+    },
+    "multi-tenant-model-isolation": {
+      "source": "maruakshay/mii-ai-security",
+      "sourceType": "github",
+      "skillPath": "skills/multi-tenant-model-isolation/SKILL.md",
+      "computedHash": "a10aeda5cbd01b9c976ef06b7807192cf1358487b87572cfc64bb26aaccbeafb"
+    },
+    "nats": {
+      "source": "claude-dev-suite/claude-dev-suite",
+      "sourceType": "github",
+      "skillPath": "skills/messaging/nats/SKILL.md",
+      "computedHash": "1603f9a232680b2c35642b6f110ecfd09cbc4af5da3a531f61f99105638bf6d2"
+    },
+    "physical-ai-people-attribute-search": {
+      "source": "nvidia/skills",
+      "sourceType": "github",
+      "skillPath": "skills/physical-ai-people-attribute-search/SKILL.md",
+      "computedHash": "571362890a04770a9455906e4fed21ad98a11e30db32cc0fb993103f32fa547f"
+    },
+    "rabbitmq-development": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "rabbitmq-development/SKILL.md",
+      "computedHash": "5696250d6eb09665ce24ee60d6528f0cd0492c7341a708d0ac2937c307b37a12"
+    },
+    "redis-caching": {
+      "source": "shipshitdev/library",
+      "sourceType": "github",
+      "skillPath": "skills/redis-caching/SKILL.md",
+      "computedHash": "fbe23cd8154b8681a225dda6d5f684e3ffd5f06e855f017fc7829da217b5cab7"
+    },
+    "rezi-add-widget": {
+      "source": "rtlzeromemory/rezi",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/rezi-add-widget/SKILL.md",
+      "computedHash": "9e5bf2014c6e1ffca06b24e8e3484c8164dc0cbf3f6b464b7b27d177601d2f35"
+    },
+    "run-with-it": {
+      "source": "chanakya-net/ai-skills",
+      "sourceType": "github",
+      "skillPath": "skills/run-with-it/SKILL.md",
+      "computedHash": "455105b39dc3b2f95c45caf6c02b4f9d530be424bab52f62535ea2ae5190aa47"
+    },
+    "semgrep": {
+      "source": "semgrep/skills",
+      "sourceType": "github",
+      "skillPath": "skills/semgrep/SKILL.md",
+      "computedHash": "2ea1b9502a5cebbc74b5791dcabac00090bb00fc9a67d87a54bbd895c74a1cd6"
+    },
+    "skill-manifest-generator": {
+      "source": "skillscatalog/registry",
+      "sourceType": "github",
+      "skillPath": "skills/skill-manifest-generator/SKILL.md",
+      "computedHash": "9d599a4d06e52aba6e4caa2d4eff9245d815b557ac293061395ff91e361395f7"
+    },
+    "skillvet": {
+      "source": "oakencore/skillvet",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "bbbca383640525383931b77d03a0b9a584d0b71982b15b5c0cb10ffee0376dc6"
+    },
+    "static-code-analysis": {
+      "source": "aj-geddes/useful-ai-prompts",
+      "sourceType": "github",
+      "skillPath": "skills/static-code-analysis/SKILL.md",
+      "computedHash": "59312248703d0f17c2ba97249599c6ff61e2fd9f461f5cdf06dfb4ed4af9398a"
+    },
+    "supabase-audit-realtime": {
+      "source": "yoanbernabeu/supabase-pentest-skills",
+      "sourceType": "github",
+      "skillPath": "skills/audit-realtime/supabase-audit-realtime/SKILL.md",
+      "computedHash": "f0bc55c9e7b46254ccf51558b0e41cbcc127a95eae8aa44976d4271918f0f3d2"
+    },
+    "tui-tester": {
+      "source": "google-gemini/gemini-cli",
+      "sourceType": "github",
+      "skillPath": ".gemini/skills/tui-tester/SKILL.md",
+      "computedHash": "58740340a29c227ad91cd9ca33efa51fd6916eb40faad88fe2299435d112879e"
+    },
+    "using-message-queues": {
+      "source": "ancoleman/ai-design-components",
+      "sourceType": "github",
+      "skillPath": "skills/using-message-queues/SKILL.md",
+      "computedHash": "5c22f67351dabe6c59d2397d3c58edb9638b08e05768f153088e3945bdc35fa3"
+    },
+    "websocket-streaming": {
+      "source": "erichowens/some_claude_skills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/websocket-streaming/SKILL.md",
+      "computedHash": "35cf27e9b4a2431110e94e2d91e1d7193c552b62fcc2558355a22474052b7ef3"
+    }
+  }
+}

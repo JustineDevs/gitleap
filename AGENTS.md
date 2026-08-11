@@ -1,0 +1,116 @@
+---
+description: Root operating guide for GitLeap work. This file mirrors AGENT.mdc so standard AGENTS.md-aware tooling can load the same repo contract.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# GitLeap Root Agent Guide
+
+Use this file as the repo-local operating contract for GitLeap work.
+
+## Context Order
+
+When working in this repository, use context in this order:
+
+1. [[/home/justine/Documents/vault/GitLeap/GitLeap Index|GitLeap Index]]
+2. [[/home/justine/Documents/vault/GitLeap/GitLeap Project Context|GitLeap Project Context]]
+3. [[/home/justine/Documents/vault/GitLeap/GitLeap Architecture and Asset Map|GitLeap Architecture and Asset Map]]
+4. [[/home/justine/Documents/vault/GitLeap/GitLeap Skill Families|GitLeap Skill Families]]
+5. [[/home/justine/Documents/vault/GitLeap/GitLeap Source Inventory|GitLeap Source Inventory]]
+6. The active repository tree
+
+The vault is the navigation layer. The repository is the evidence layer.
+
+## Source Boundaries
+
+- Use `README.md` for product narrative and the current claim set.
+- Use `.agents/skills/` as the installed skill library.
+- Use `.internal/reference/` as the private clone/reference corpus for patterns, systems, logic, structure, and design.
+- Treat `.claude/skills/` as secondary unless a task explicitly requires it.
+- Do not invent behavior that is not supported by the repository or the reference corpus.
+
+## Skill Routing
+
+If a task matches an installed skill, use that skill first.
+
+### How to apply skills
+
+1. Identify the narrowest matching skill or skill set in `.agents/skills/`.
+2. Read the matching `SKILL.md` before editing or producing outputs.
+3. Follow any referenced `references/`, `scripts/`, `examples/`, `templates/`, or `schemas/` in that skill package.
+4. If multiple skills match, use the minimal set that covers the task.
+5. If no skill matches cleanly, continue with direct repository analysis and state that no better skill fit was found.
+
+### When to use the installed skills
+
+- `advisor-orchestrator-worker` - use for orchestration, worker handoff structure, or advisory workflow coordination.
+- `ai-pipeline-orchestration` - use for multi-stage AI pipelines, queueing, staged processing, or pipeline control.
+- `add-compat-flag` - use when adding or documenting compatibility toggles or migration flags.
+- `building-tui-apps` - use for terminal UI behavior, TUI layout, keyboard navigation, and CLI interaction surfaces.
+- `caching-strategies` - use for cache design, cache invalidation, and cache-aware flow shaping.
+- `dev-context-multi-repo` - use for repo mapping, portfolio analysis, cross-repo context, and hub-style documentation.
+- `docker-compose-production` - use for compose-based production orchestration and container wiring.
+- `docker-management` - use for Docker lifecycle, container operations, and image/runtime handling.
+- `docker-storage` - use for persistent volumes, storage layout, restore flow, and backup-oriented container storage.
+- `docker-volumes` - use for volume configuration, validation, and volume schema handling.
+- `embedding-optimization` - use for chunking, batching, embedding cost control, and embedding throughput work.
+- `file-upload-and-ssrf` - use for upload safety, SSRF prevention, and hostile input surfaces.
+- `gitignore` - use for ignore-rule design, repo hygiene, and exclusion policy changes.
+- `implementing-realtime-sync` - use for websocket, SSE, offline sync, and live collaboration logic.
+- `lightning-sandboxes` - use for sandboxed execution environments and lightning-style runtime patterns.
+- `llm-inference-scaling` - use for model serving scale, cost, concurrency, and inference capacity concerns.
+- `malicious-behavior` - use for malicious content detection, sandbox risk handling, or abuse-oriented analysis.
+- `memory-optimize` - use for memory pressure reduction, footprint trimming, and memory-aware refactors.
+- `multi-tenant-architecture` - use for tenant boundaries, isolation, and shared-platform design.
+- `multi-tenant-model-isolation` - use for tenant-level model separation and isolation guarantees.
+- `nats` - use for NATS messaging, pub/sub, and event transport.
+- `physical-ai-people-attribute-search` - use for people-attribute search workflows or benchmarked matching flows.
+- `rabbitmq-development` - use for RabbitMQ-based queueing and messaging workflows.
+- `redis-caching` - use for Redis-backed caching and plugin-oriented caching behavior.
+- `rezi-add-widget` - use for Rezi-specific widget integration work.
+- `run-with-it` - use when the task needs execution follow-through instead of more planning.
+- `skill-manifest-generator` - use for generating skill manifests or packaging metadata.
+- `skillvet` - use for skill auditing, validation, and corpus quality checks.
+- `static-code-analysis` - use for static scanning, lint-style validation, AST-oriented checks, and code integrity review.
+- `supabase-audit-realtime` - use for Supabase audit or realtime review flows.
+- `tree-sitter` - use for AST parsing, structural code reading, and language-agnostic code shape analysis.
+- `tui-tester` - use for testing terminal UI behavior.
+- `using-message-queues` - use for queue selection, event-driven patterns, and worker orchestration.
+- `websocket-streaming` - use for websocket streaming design and transport implementation.
+- `semgrep' - use for Fast, pattern-based static analysis for security scanning and custom rule creation.
+- 'ast-grep-outline' - Use ast-grep outline Understand a file before editing. Get a table of contents, dependencies, and public entry points before reading implementation details.
+
+## Reference Usage
+
+`.internal/reference/` contains private clone material that should be used as a pattern source.
+
+Use it when you need to understand:
+
+- how to structure modules
+- how to organize system boundaries
+- how to shape request or event flow
+- how to align implementation style with the existing project family
+- how to mirror design patterns already proven in the reference corpus
+
+Do not edit reference material unless the task explicitly asks for reference maintenance.
+
+## Development Rules
+
+- Prefer the vault notes first when deciding what this repository is trying to represent.
+- Prefer installed skills over ad hoc reasoning when a matching skill exists.
+- Prefer repository evidence over assumption when a file or behavior can be inspected directly.
+- Prefer the smallest correct change.
+- Keep explanations aligned to actual files and actual repository state.
+
+## Expected Workflow
+
+For a normal repo task:
+
+1. Read the vault notes to understand the intent and current structure.
+2. Inspect the repository tree to verify the current state.
+3. Activate the relevant skill(s) from `.agents/skills/` if the task matches one.
+4. Use `.internal/reference/` for pattern comparison when the implementation shape matters.
+5. Edit the minimum necessary files.
+6. Verify the result before claiming completion.
+
