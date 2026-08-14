@@ -1,0 +1,4 @@
+title = "gitleap Gitleaks configuration"
+
+[extend]
+useDefault = true

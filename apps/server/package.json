@@ -1,0 +1,48 @@
+{
+  "name": "server",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -b",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+    "test": "vitest run --passWithNoTests",
+    "dev": "bun run --hot src/index.ts",
+    "start": "bun run dist/index.js"
+  },
+  "dependencies": {
+    "@arcjet/node": "^1.9.1",
+    "@gitleap/api": "workspace:*",
+    "@gitleap/auth": "workspace:*",
+    "@gitleap/db": "workspace:*",
+    "@gitleap/env": "workspace:*",
+    "@hono/trpc-server": "^0.4.2",
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/auto-instrumentations-node": "0.78.0",
+    "@opentelemetry/exporter-metrics-otlp-http": "0.220.0",
+    "@opentelemetry/exporter-trace-otlp-http": "0.220.0",
+    "@opentelemetry/resources": "2.9.0",
+    "@opentelemetry/sdk-metrics": "2.9.0",
+    "@opentelemetry/sdk-node": "0.220.0",
+    "@opentelemetry/semantic-conventions": "^1.43.0",
+    "@trpc/server": "catalog:",
+    "@upstash/redis": "^1.38.2",
+    "better-auth": "catalog:",
+    "bullmq": "^5.81.2",
+    "dotenv": "catalog:",
+    "hono": "catalog:",
+    "posthog-node": "^5.48.1",
+    "stripe": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@gitleap/config": "workspace:*",
+    "@types/bun": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "jsdom": "catalog:",
+    "tsdown": "^0.22.3",
+    "typescript": "^6.0.3",
+    "vitest": "catalog:"
+  }
+}

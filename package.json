@@ -1,0 +1,75 @@
+{
+  "name": "gitleap",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "catalog": {
+      "dotenv": "^17.4.2",
+      "zod": "^4.4.3",
+      "@types/bun": "^1.3.14",
+      "hono": "^4.12.27",
+      "@trpc/server": "^11.18.0",
+      "better-auth": "^1.6.22",
+      "stripe": "^22.4.0",
+      "vitest": "4.1.8",
+      "@vitest/ui": "4.1.8",
+      "@vitest/coverage-v8": "4.1.8",
+      "jsdom": "^29.1.1",
+      "react": "^19.2.8",
+      "react-dom": "^19.2.8",
+      "@prisma/client": "^7.9.1",
+      "@trpc/client": "^11.18.0",
+      "@types/node": "^26.2.0",
+      "@types/react": "^19.2.18",
+      "@types/react-dom": "^19.2.4",
+      "postcss": "^8.5.15",
+      "tailwindcss": "^4.3.3"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:web": "turbo -F web dev",
+    "dev:docs": "turbo -F docs dev",
+    "build:docs": "turbo -F docs build",
+    "check:docs": "turbo -F docs check-types",
+    "dev:server": "turbo -F server dev",
+    "db:push": "turbo -F @gitleap/db db:push",
+    "db:studio": "turbo -F @gitleap/db db:studio",
+    "db:generate": "turbo -F @gitleap/db db:generate",
+    "db:migrate": "turbo -F @gitleap/db db:migrate",
+    "test": "bun run --filter web test && bun run --filter server test && bun run --filter @gitleap/api test",
+    "lint": "ultracite check",
+    "format": "ultracite fix",
+    "lint:doctor": "ultracite doctor",
+    "knip": "knip",
+    "knip:production": "knip --production",
+    "secrets:scan": "gitleaks git --redact --verbose",
+    "secrets:scan:staged": "gitleaks git --pre-commit --redact --staged --verbose",
+    "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only"
+  },
+  "dependencies": {
+    "@gitleap/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.7",
+    "@gitleap/config": "workspace:*",
+    "@types/bun": "catalog:",
+    "knip": "^6.32.0",
+    "turbo": "^2.10.0",
+    "typescript": "^6.0.3",
+    "ultracite": "^7.10.1",
+    "vercel": "^54.18.2"
+  },
+  "overrides": {
+    "kysely": "0.28.17"
+  },
+  "packageManager": "bun@1.3.14"
+}

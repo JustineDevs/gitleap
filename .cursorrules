@@ -1,0 +1,17 @@
+# Project: gitleap
+# Ecosystem: Typescript
+
+You are working on a TypeScript project.
+Runtime: bun
+Package manager: bun
+Frontend: react-vite
+Backend: hono
+Database: postgres with prisma
+API: trpc
+Auth: better-auth
+Testing: vitest
+Validation: zod
+
+Follow existing code patterns and conventions.
+Use the established project structure.
+Keep this file updated when the project structure changes.
