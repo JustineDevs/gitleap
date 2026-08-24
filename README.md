@@ -43,7 +43,9 @@ It is designed for individual developers, open-source maintainers, and engineeri
 
 ### Installation
 
-```curl -sL https://gitleap.com | sh && gitleap auth login <token>```
+```
+curl -sL https://gitleap.com | sh && gitleap auth login <token>
+```
 
 ## Step 1: Initiating the Leap
 Instead of swapping a domain in a browser, a developer passes any public GitHub repository URL directly to the CLI client:
