@@ -8,7 +8,7 @@ on:
 
 jobs:
   ci:
-    name: Lint, Type Check & Build
+    name: Lint, Type Check, Tests & Release Gates
     runs-on: ubuntu-latest
 
     steps:
@@ -18,13 +18,16 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest
+          bun-version: 1.3.14
 
       - name: Install dependencies
-        run: bun install
+        run: bun install --frozen-lockfile
 
       - name: Lint
-        run: bunx @biomejs/biome check .
+        run: bun run lint
+
+      - name: Production dependency and file audit
+        run: DATABASE_URL=postgresql://gitleap:gitleap@localhost:55432/gitleap bun run knip:production
 
       - name: Type check
         run: bun run check-types
@@ -32,5 +35,74 @@ jobs:
       - name: Build
         run: bun run build
 
+      - name: Build production server image
+        run: docker build -f apps/server/Dockerfile -t gitleap-server-ci .
+
       - name: Test
         run: bun run test
+
+      - name: Start disposable infrastructure
+        run: bun run test:infra:up
+
+      - name: Apply migrations
+        run: bun run test:infra:migrate
+
+      - name: Verify migration upgrade path
+        run: bun run test:infra:upgrade
+
+      - name: Verify database invariants
+        run: bun run test:infra:verify
+
+      - name: Verify worker lease recovery
+        run: bun run test:infra:recovery
+
+      - name: Verify cancellation and publication race
+        run: bun run test:infra:race
+
+      - name: Verify atomic submission quota
+        run: bun run test:infra:quota
+
+      - name: Verify Redis outbox and crash recovery
+        run: bun run test:infra:queue
+
+      - name: Verify artifact expiry cleanup
+        run: bun run test:infra:cleanup
+
+      - name: Verify worker processing kernel
+        run: bun run test:infra:pipeline
+
+      - name: Verify load and quota limits
+        run: bun run test:load
+
+      - name: Smoke authenticated processing lifecycle
+        run: >-
+          DATABASE_URL=postgresql://gitleap:gitleap@localhost:55432/gitleap
+          SUPABASE_URL=https://example.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY=test-service-role
+          SUPABASE_STORAGE_BUCKET=private
+          CORS_ORIGIN=http://localhost:3000
+          BETTER_AUTH_SECRET=test-secret-test-secret-test-secret
+          BETTER_AUTH_URL=http://localhost:3000
+          STRIPE_SECRET_KEY=test-stripe
+          STRIPE_WEBHOOK_SECRET=test-webhook
+          ARCJET_KEY=test-arcjet
+          bun run smoke:processing
+
+      - name: Smoke HTTP authenticated worker lifecycle
+        run: bun run smoke:http-lifecycle
+
+      - name: Smoke real public GitHub archive
+        run: bun run smoke:github
+
+      - name: Smoke OpenTelemetry export
+        run: bun run smoke:otel
+
+      - name: Check repository execution boundary
+        run: bun run check:execution-boundary
+
+      - name: Scan repository for secrets
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest detect --source=/repo --config=/repo/.gitleaks.toml --redact --no-banner
+
+      - name: Stop disposable infrastructure
+        if: always()
+        run: bun run test:infra:down

@@ -1,0 +1,1 @@
+ALTER TABLE "JobStage" ADD COLUMN "output" JSONB;

@@ -1,0 +1,33 @@
+---
+title: CLI and Client Flow
+description: Submit, monitor, cancel, and download a generated pack.
+---
+
+## Interactive CLI
+
+Run `gitleap` or `bun run dev:cli` in a terminal. The interactive console supports:
+
+- email/password authentication with a mode-600 session file under `$XDG_CONFIG_HOME/gitleap/session`
+- public GitHub URL and revision submission
+- live pipeline stage inspection and bounded polling
+- cooperative cancellation with a state-version check
+- artifact download and archive injection into an existing directory
+- keyboard navigation with resize-aware pipeline and explorer grids
+
+The interactive client never executes files from the generated archive. Injection validates archive paths and extracts with ownership metadata disabled.
+
+## Scriptable commands
+
+```bash
+gitleap login
+gitleap submit https://github.com/owner/repository --revision 40-character-sha
+gitleap status <job-id>
+gitleap cancel <job-id> --version <state-version>
+gitleap download <job-id> --output ./pack.tar.gz
+```
+
+All processing commands require an authenticated session. The server authorizes every status, cancellation, and download request from the persisted job access grant; a job ID is not a credential.
+
+## Public states
+
+Clients receive only `queued`, `running`, `ready`, `failed`, `cancelled`, or `expired`. Internal lease, retry, and stage names are not part of the public contract.

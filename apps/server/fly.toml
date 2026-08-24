@@ -5,7 +5,11 @@ app = "gitleap-server"
 primary_region = "iad"
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = "apps/server/Dockerfile"
+
+[processes]
+  app = "bun run dist/index.mjs"
+  worker = "bun run dist/worker.mjs"
 
 [env]
   NODE_ENV = "production"
@@ -34,4 +38,4 @@ primary_region = "iad"
 [[vm]]
   size = "shared-cpu-1x"
   memory = "512mb"
-  processes = ["app"]
+  processes = ["app", "worker"]

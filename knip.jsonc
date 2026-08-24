@@ -1,3 +1,33 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  "entry": [
+    "apps/*/src/index.ts",
+    "apps/server/src/worker.ts",
+    "apps/server/src/lib/tracing-smoke.ts",
+    "apps/server/src/processing/*-smoke.ts",
+    "apps/web/src/main.tsx",
+    "scripts/**/*.{mjs,ts}"
+  ],
+  "ignoreFiles": ["apps/server/src/processing/*-smoke.ts"],
+  "ignoreBinaries": ["vite"],
+  "ignoreDependencies": [
+    "@prisma/client",
+    "pg",
+    "dotenv",
+    "zod",
+    "@tailwindcss/vite"
+  ],
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/**/*.{mjs,ts}"]
+    },
+    "apps/server": {
+      "entry": [
+        "src/index.ts",
+        "src/worker.ts",
+        "src/lib/tracing-smoke.ts",
+        "src/processing/*-smoke.ts"
+      ]
+    }
+  }
 }

@@ -11,15 +11,13 @@
   },
   "scripts": {
     "check-types": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run"
   },
   "dependencies": {
     "@gitleap/auth": "workspace:*",
     "@gitleap/db": "workspace:*",
     "@gitleap/env": "workspace:*",
-    "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
-    "dotenv": "catalog:",
     "hono": "catalog:",
     "zod": "catalog:"
   },

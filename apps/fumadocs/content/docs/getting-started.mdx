@@ -1,0 +1,48 @@
+---
+title: Local Setup
+description: Configure GitLeap for local development and verification.
+---
+
+## Prerequisites
+
+- Bun `1.3.14`
+- Docker with Compose
+- PostgreSQL and Redis are provided by `infra/docker-compose.test.yml`
+
+Install dependencies and start the disposable services:
+
+```bash
+bun install --frozen-lockfile
+bun run test:infra:up
+bun run test:infra:migrate
+```
+
+Copy the repository-root `.env.example` to `.env`. Root-launched Bun, Vite,
+and worker commands load this file consistently. Use a random development-only
+`BETTER_AUTH_SECRET` with at least 32 characters. Keep Supabase credentials and
+model credentials out of source control.
+
+The local HTTP setup uses development-safe authentication cookie attributes.
+Production deployments must use HTTPS; production cookies are secure and the
+configured `CORS_ORIGIN` remains the only trusted browser origin.
+
+Run the clients and server in separate terminals:
+
+```bash
+bun run dev:server
+bun run dev:web
+bun run dev:cli
+```
+
+The server health check is `GET /health`. The CLI opens its interactive console when both stdin and stdout are terminals.
+
+## Verification
+
+```bash
+bun run check-types
+bun run lint
+bun run test
+bun run build
+```
+
+The infrastructure checks additionally verify migrations, lease recovery, cancellation/publication race fencing, quota atomicity, queue recovery, the processing fixture, and load limits.

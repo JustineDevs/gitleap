@@ -25,7 +25,13 @@
       "!**/.svelte-kit",
       "!**/wrangler.jsonc",
       "!**/.source",
-      "!**/convex/_generated"
+      "!**/convex/_generated",
+      "!**/.internal/reference",
+      "!**/.agents",
+      "!**/.omx",
+      "!**/prisma/generated",
+      "!biome.jsonc",
+      "!knip.jsonc"
     ]
   },
   "formatter": {

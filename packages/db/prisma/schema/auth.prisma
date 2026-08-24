@@ -8,6 +8,8 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  jobAccess     JobAccess[]
+  submissionQuotas SubmissionQuota[]
 
   @@unique([email])
   @@map("user")
@@ -60,4 +62,3 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
-

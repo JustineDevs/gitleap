@@ -1,0 +1,189 @@
+enum ProcessingState {
+  QUEUED
+  CLAIMED
+  PROCESSING
+  READY
+  FAILED_RETRYABLE
+  FAILED_TERMINAL
+  CANCEL_REQUESTED
+  CANCELLED
+  EXPIRED
+}
+
+enum AccessRole {
+  OWNER
+  READER
+}
+
+enum StageState {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED_RETRYABLE
+  FAILED_TERMINAL
+  CANCELLED
+}
+
+model SourceIdentity {
+  id                String           @id @default(cuid())
+  provider          String
+  owner             String
+  repository        String
+  commitSha         String
+  pipelineVersion   String
+  configurationHash String
+  createdAt         DateTime         @default(now())
+  jobs              ProcessingJob[]
+
+  @@unique([provider, owner, repository, commitSha, pipelineVersion, configurationHash])
+  @@index([owner, repository, commitSha])
+}
+
+model ProcessingJob {
+  id                 String           @id @default(cuid())
+  sourceIdentityId   String
+  sourceIdentity     SourceIdentity   @relation(fields: [sourceIdentityId], references: [id], onDelete: Restrict)
+  state              ProcessingState  @default(QUEUED)
+  stateVersion       Int              @default(0)
+  attempt            Int              @default(0)
+  leaseToken         String?
+  workerId           String?
+  leaseExpiresAt     DateTime?
+  heartbeatAt        DateTime?
+  cancelRequestedAt  DateTime?
+  reservedCostUsd    Decimal          @default(0) @db.Decimal(12, 6)
+  usedCostUsd        Decimal          @default(0) @db.Decimal(12, 6)
+  maxCostUsd         Decimal          @default(2) @db.Decimal(12, 6)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  expiresAt          DateTime?
+  access             JobAccess[]
+  stages             JobStage[]
+  artifacts          Artifact[]
+  outboxEvents       OutboxEvent[]
+  usage              UsageRecord[]
+  auditEvents        AuditEvent[]
+  consumerInbox      ConsumerInbox[]
+
+  @@index([state, leaseExpiresAt])
+  @@index([sourceIdentityId, state])
+}
+
+model JobAccess {
+  id         String      @id @default(cuid())
+  jobId      String
+  userId     String
+  role       AccessRole
+  grantedAt  DateTime    @default(now())
+  revokedAt  DateTime?
+  job        ProcessingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, userId])
+  @@index([userId, revokedAt])
+}
+
+model JobStage {
+  id          String      @id @default(cuid())
+  jobId       String
+  name        String
+  inputDigest String
+  outputDigest String?
+  output      Json?
+  state       StageState  @default(PENDING)
+  errorCode   String?
+  errorMessage String?
+  startedAt   DateTime?
+  finishedAt  DateTime?
+  createdAt   DateTime    @default(now())
+  job         ProcessingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, name, inputDigest])
+  @@index([jobId, state])
+}
+
+model Artifact {
+  id          String      @id @default(cuid())
+  jobId       String
+  objectKey   String      @unique
+  checksum    String
+  sizeBytes   BigInt
+  contentType String
+  provenance  Json
+  availableAt DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime    @default(now())
+  job         ProcessingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, checksum])
+  @@index([expiresAt, availableAt])
+}
+
+model OutboxEvent {
+  id             String      @id
+  jobId          String
+  eventType      String
+  stateVersion   Int
+  payloadVersion Int         @default(1)
+  payload        Json
+  publishAttempts Int        @default(0)
+  claimedAt      DateTime?
+  claimToken     String?
+  publishedAt    DateTime?
+  createdAt      DateTime    @default(now())
+  job            ProcessingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([publishedAt, claimedAt])
+}
+
+model ConsumerInbox {
+  eventId    String      @id
+  jobId      String
+  acceptedAt DateTime    @default(now())
+  expiresAt  DateTime
+  job        ProcessingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
+
+model UsageRecord {
+  id             String      @id @default(cuid())
+  jobId          String
+  stage          String      @default("unknown")
+  leaseToken     String?
+  inputTokens    Int         @default(0)
+  outputTokens   Int         @default(0)
+  reservedCostUsd Decimal    @default(0) @db.Decimal(12, 6)
+  actualCostUsd  Decimal     @default(0) @db.Decimal(12, 6)
+  durationMs     Int         @default(0)
+  storageBytes   BigInt      @default(0)
+  reconciledAt   DateTime?
+  createdAt      DateTime    @default(now())
+  job            ProcessingJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt])
+}
+
+model AuditEvent {
+  id         String      @id @default(cuid())
+  actorId    String?
+  jobId      String?
+  action     String
+  metadata   Json
+  createdAt  DateTime    @default(now())
+  job        ProcessingJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
+
+  @@index([jobId, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model SubmissionQuota {
+  id          String   @id @default(cuid())
+  userId      String
+  windowStart DateTime
+  count       Int      @default(0)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, windowStart])
+  @@index([windowStart])
+}

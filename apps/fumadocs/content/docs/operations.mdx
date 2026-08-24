@@ -1,0 +1,19 @@
+---
+title: Processing and Recovery
+description: Understand durable jobs, retries, and artifact lifecycle.
+---
+
+Each submission is keyed by normalized provider, owner, repository, resolved commit SHA, pipeline version, and configuration digest. Repeating the same request reuses an active job or an unexpired ready artifact.
+
+The server writes the job and an outbox event in one database transaction. A worker claims the job with a lease and fencing token. A publisher can safely retry an outbox event because the BullMQ job ID is derived from the immutable event ID and its payload is checked before reuse.
+
+Retryable failures return the job to the queue with a bounded exponential delay. Terminal policy, size, model, cost, and configuration failures do not retry indefinitely. A worker heartbeat extends its lease; an expired lease is fenced and recovered by the worker supervisor.
+
+Cancellation is cooperative. A queued job can become terminally cancelled immediately. A claimed or processing job records `cancel_requested`; the active stage receives an abort signal and ready publication is guarded by the state version, lease token, and cancellation marker.
+
+Generated artifacts are stored in a private Supabase Storage bucket. Postgres records their checksum, size, provenance, and expiry. Download URLs are issued only after authorization and are limited to 15 minutes.
+
+When deployment credentials are available, run `bun run smoke:supabase` against
+the configured private bucket. The command uploads a disposable object,
+verifies its short-lived signed URL and checksum, and deletes the object in a
+`finally` block. It is intentionally not part of the credential-free CI gate.

@@ -1,0 +1,19 @@
+---
+title: Security and Limits
+description: Trust boundaries and resource limits for repository processing.
+---
+
+Repositories are untrusted input. GitLeap does not install dependencies, invoke Git, run repository scripts, execute build hooks, or give model calls tools that can execute source.
+
+The GitHub adapter allows only HTTPS GitHub endpoints, rejects redirects, checks resolved hosts for private and metadata-network addresses, and bounds compressed bytes, expanded bytes, file count, file size, archive paths, and processing time. Archive entries with absolute, traversal, dot-segment, unsupported-link, or malformed paths are rejected.
+
+Model context is bounded and repository text is delimited as data rather than instructions. Candidate output must use the versioned schema, cite paths in the selected evidence set, stay within token and cost budgets, and pass secret and archive checks before publication.
+
+Supabase service-role credentials are server-only. They must never be sent to browsers, included in queue payloads, or written to ordinary logs. Browser and CLI clients receive short-lived signed URLs only after server-side job authorization.
+
+Authentication cookies are HTTP-only. Development uses secure same-site cookies
+for the documented localhost setup; production enables secure cookies and
+cross-site origin protection. Arcjet rate limiting applies to authentication
+and tRPC routes, with Shield enforcement enabled in production.
+
+The MVP supports public GitHub repositories, the approved TypeScript/JavaScript/JSON/Markdown lexical parser, one model adapter, polling, and private artifact delivery. Private repositories, arbitrary execution, additional providers, broad language coverage, realtime transport, and marketplace behavior are intentionally deferred until their ADR exit gates are proven.

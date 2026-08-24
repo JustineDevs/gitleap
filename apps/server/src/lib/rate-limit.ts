@@ -1,10 +1,11 @@
 import arcjet, { shield, slidingWindow } from "@arcjet/node";
+import { env } from "@gitleap/env/server";
 
 export const arcjetRateLimit = arcjet({
-  key: process.env.ARCJET_KEY!,
+  key: env.ARCJET_KEY,
   rules: [
     shield({
-      mode: "DRY_RUN",
+      mode: env.NODE_ENV === "production" ? "LIVE" : "DRY_RUN",
     }),
     slidingWindow({
       mode: "LIVE",

@@ -2,3 +2,10 @@ title = "gitleap Gitleaks configuration"
 
 [extend]
 useDefault = true
+
+[allowlist]
+description = "Generated dependency metadata and protocol examples contain non-secret key-shaped text."
+paths = [
+  '''^bts\.lock\.json$''',
+  '''^\.agents/skills/implementing-realtime-sync/references/websockets\.md$''',
+]

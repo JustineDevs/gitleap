@@ -6,7 +6,8 @@
     "build": "tsdown",
     "check-types": "tsc -b",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
-    "test": "vitest run --passWithNoTests",
+    "worker": "bun run src/worker.ts",
+    "test": "test -n \"$(find src/processing -name '*.test.ts' -print -quit 2>/dev/null)\" || (echo 'missing processing tests' >&2 && exit 1); vitest run src --exclude 'dist/**'",
     "dev": "bun run --hot src/index.ts",
     "start": "bun run dist/index.js"
   },
@@ -26,14 +27,8 @@
     "@opentelemetry/sdk-node": "0.220.0",
     "@opentelemetry/semantic-conventions": "^1.43.0",
     "@trpc/server": "catalog:",
-    "@upstash/redis": "^1.38.2",
-    "better-auth": "catalog:",
     "bullmq": "^5.81.2",
-    "dotenv": "catalog:",
-    "hono": "catalog:",
-    "posthog-node": "^5.48.1",
-    "stripe": "catalog:",
-    "zod": "catalog:"
+    "hono": "catalog:"
   },
   "devDependencies": {
     "@gitleap/config": "workspace:*",
@@ -41,7 +36,7 @@
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
     "jsdom": "catalog:",
-    "tsdown": "^0.22.3",
+    "tsdown": "0.19.0",
     "typescript": "^6.0.3",
     "vitest": "catalog:"
   }

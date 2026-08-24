@@ -1,0 +1,30 @@
+---
+title: Supported Product Boundary
+description: The behavior GitLeap currently supports and the capabilities intentionally deferred.
+---
+
+GitLeap's current release is the safe processing MVP. It accepts a public
+GitHub repository and revision, resolves mutable revisions to an immutable
+commit, inventories source without executing it, produces an evidence-backed
+pack, and exposes the artifact only through an authorized short-lived URL.
+
+## Supported now
+
+- Public HTTPS GitHub repositories.
+- Branch, tag, or commit input resolved to an immutable commit SHA.
+- TypeScript, JavaScript, JSON, and Markdown lexical inventory.
+- Deterministic evidence slices and bounded model synthesis.
+- Durable jobs, retries, cancellation, quotas, audit events, and recovery.
+- Private Supabase Storage artifacts with checksum verification.
+- Browser polling and an interactive-by-default TypeScript/Bun CLI.
+
+## Intentionally deferred
+
+Private repositories, additional hosting providers, arbitrary repository code
+execution, broad language parsing, multiple model providers, realtime progress
+transport, marketplace behavior, and automatic deployment are not part of this
+release. Each expansion requires a separate adapter, authorization, cost, and
+failure-mode proof before it becomes supported behavior.
+
+The detailed architecture and ADR records in the repository describe those
+expansion gates; this page is the user-facing contract for the current release.

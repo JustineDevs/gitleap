@@ -83,7 +83,7 @@ If a task matches an installed skill, use that skill first.
 
 ## Reference Usage
 
-`.internal/reference/` contains private clone material that should be used as a pattern source.
+`.internal/reference/` contains private clone material that should be used as a feature mapping pattern, design, logic, topology, method, etc. source.
 
 Use it when you need to understand:
 

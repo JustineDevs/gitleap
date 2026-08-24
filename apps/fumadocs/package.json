@@ -6,10 +6,9 @@
     "build": "next build",
     "dev": "next dev --port=4000",
     "start": "next start",
-    "types:check": "next typegen && tsc --noEmit"
+    "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "cnfast": "^0.1.0",
     "fumadocs-core": "16.14.4",
     "fumadocs-mdx": "15.2.3",
     "fumadocs-ui": "npm:@fumadocs/base-ui@16.14.4",
