@@ -27,6 +27,7 @@ describe("interactive layout", () => {
     expect(pipelineGrid?.getChildrenCount()).toBe(5);
     expect(explorerGrid?.getChildrenCount()).toBe(2);
     expect(root.findDescendantById("gitleap-body")?.getChildrenCount()).toBe(7);
+    expect(root.findDescendantById("pipeline-stage-0")).toBeUndefined();
   });
 
   test("wraps explorer columns after a terminal resize", async () => {
@@ -42,14 +43,21 @@ describe("interactive layout", () => {
     state.screen = "explorer";
     state.render();
     await setup.renderOnce();
+    const desktopSkills = setup.renderer.root.findDescendantById("explorer-skills-panel");
+    const desktopDetail = setup.renderer.root.findDescendantById("explorer-detail-panel");
+    const desktopPreview = setup.renderer.root.findDescendantById("explorer-preview-panel");
+    expect(desktopDetail?.width).toBeGreaterThan(desktopSkills?.width ?? 0);
+    expect(desktopPreview?.width).toBeGreaterThan(desktopDetail?.width ?? 0);
 
     setup.resize(36, 30);
     await setup.renderOnce();
     const skills = setup.renderer.root.findDescendantById("explorer-skills-panel");
     const detail = setup.renderer.root.findDescendantById("explorer-detail-panel");
+    const preview = setup.renderer.root.findDescendantById("explorer-preview-panel");
     expect(skills?.width).toBeGreaterThan(0);
     expect(detail?.width).toBeGreaterThan(0);
     expect(detail?.y).toBeGreaterThan(skills?.y ?? -1);
+    expect(preview?.width).toBeGreaterThan(0);
   });
 
   test("drives the home menu with real mocked key events", async () => {

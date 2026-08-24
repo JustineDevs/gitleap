@@ -9,7 +9,10 @@ type UiNode = { content?: unknown; visible: boolean };
 const TERMINAL_STATES = new Set(["ready", "failed", "cancelled", "expired"]);
 const EXPLORER_TABS = ["Skills", "Schema Config", "Blueprint Engine", "System Diagnostics"];
 
-export async function runInteractive(serverUrl: string): Promise<void> {
+export async function runInteractive(
+  serverUrl: string,
+  options?: { initialUrl?: string; initialRevision?: string; autoSubmit?: boolean },
+): Promise<void> {
   const renderer = await createCliRenderer({
     exitOnCtrlC: true,
     backgroundColor: COLOR.bgCanvas,
@@ -21,6 +24,9 @@ export async function runInteractive(serverUrl: string): Promise<void> {
     serverUrl,
   );
   app.mount();
+  if (options?.autoSubmit && options.initialUrl) {
+    void app.startPull(options.initialUrl, options.initialRevision ?? "HEAD");
+  }
   await new Promise<void>((resolve) => (app.onExit = resolve));
 }
 
@@ -126,27 +132,15 @@ export class InteractiveApp {
           Box(
             {
               id: "pipeline-grid",
-              flexDirection: "row",
-              flexWrap: "wrap",
+              border: true,
+              borderStyle: "rounded",
+              borderColor: COLOR.border,
+              flexDirection: "column",
               flexGrow: 1,
-              gap: 1,
-              alignItems: "stretch",
+              paddingX: 1,
             },
             ...Array.from({ length: 5 }, (_, index) =>
-              Box(
-                {
-                  id: `pipeline-stage-${index}`,
-                  border: true,
-                  borderStyle: "rounded",
-                  borderColor: COLOR.border,
-                  flexGrow: 1,
-                  flexBasis: 18,
-                  minWidth: 18,
-                  minHeight: 5,
-                  padding: 1,
-                },
-                Text({ id: `pipeline-stage-text-${index}`, content: "", fg: COLOR.textNormal }),
-              ),
+              Text({ id: `pipeline-stage-text-${index}`, content: "", fg: COLOR.textNormal }),
             ),
           ),
           Text({ id: "pipeline-help", content: "", fg: COLOR.textMuted }),
@@ -242,6 +236,15 @@ export class InteractiveApp {
     this.explorerPreview = find("explorer-preview");
     this.renderer.on("resize", () => this.render());
     this.render();
+  }
+
+  async startPull(url: string, revision: string): Promise<void> {
+    this.values.url = url;
+    this.values.revision = revision;
+    this.screen = "submit";
+    this.field = "url";
+    this.render();
+    await this.submitFieldForm();
   }
 
   private handleKey(key: KeyEvent): void {
@@ -668,13 +671,7 @@ export class InteractiveApp {
             : stage.state === "failed"
               ? "✗"
               : "·";
-      node.content = [
-        `${icon} ${stage.state.toUpperCase()}`,
-        "",
-        stage.name,
-        "",
-        stage.detail,
-      ].join("\n");
+      node.content = `${icon} [${stage.state.toUpperCase()}] ${pipelineStageLabel(stage.name, stage.detail)}`;
     });
     this.pipelineHelp.content =
       pipelineStatus.status === "ready"
@@ -726,7 +723,7 @@ export class InteractiveApp {
       ).join(""),
     ].join("\n");
     this.explorerSkills.content = [
-      "Skills List",
+      "Skills List (4 cols)",
       "",
       ...(skills.length
         ? skills.map(
@@ -735,13 +732,22 @@ export class InteractiveApp {
           )
         : ["No generated skills available."]),
     ].join("\n");
-    this.explorerDetail.content = detail.join("\n");
+    const metrics = [
+      "System Metrics:",
+      `${metricBar(this.details?.progress.percent ?? 0)} ${this.details?.progress.percent ?? 0}%`,
+      `Indexed files: ${this.details?.architectureMap.files.length ?? 0}  |  Edges: ${this.details?.architectureMap.edges.length ?? 0}`,
+    ];
+    this.explorerDetail.content = ["Schema Detail (8 cols)", "", ...detail, "", ...metrics].join(
+      "\n",
+    );
+    const instructions = selected?.instructions ?? description;
+    const previewLines = instructions.split("\n").slice(0, 4);
     this.explorerPreview.content = [
       `Code Blueprint Preview  ${skill}/SKILL.md`,
-      `# ${selected?.name ?? skill}`,
-      description,
+      ...previewLines.map(
+        (line, index) => `${String(index + 1).padStart(2, " ")} │ ${sanitizeTerminalText(line)}`,
+      ),
       `Evidence: ${sanitizeTerminalText(selected?.evidence[0]?.path ?? "none")}`,
-      "",
       "[d] Download  [i] Inject  ↑↓/j/k Nav  h/l Tabs  c Preview",
     ].join("\n");
     this.explorerPreview.visible = this.previewOpen;
@@ -758,4 +764,21 @@ export class InteractiveApp {
     const label = field[0].toUpperCase() + field.slice(1);
     return `${this.field === field ? ICON.prompt : " "} ${label}: ${value}`;
   }
+}
+
+function pipelineStageLabel(name: string, detail: string): string {
+  const labels: Record<string, string> = {
+    ingest: "Ingested repository source stream.",
+    architecture: "Built deterministic architecture map and evidence slices.",
+    skills: "Map-Reduce AI processing and bounded skill synthesis.",
+    compile: "Synthesizing skills-manifest.json configuration.",
+    delivery: "Stored private ready pack.",
+  };
+  return `${labels[name] ?? name}: ${detail}`;
+}
+
+function metricBar(percent: number): string {
+  const total = 24;
+  const filled = Math.round((Math.max(0, Math.min(100, percent)) / 100) * total);
+  return `${"█".repeat(filled)}${"░".repeat(total - filled)}`;
 }

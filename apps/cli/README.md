@@ -8,9 +8,9 @@ Run `gitleap` directly for the interactive terminal console. It provides keyboar
 authentication, repository submission, and live job status screens while the
 scripted commands remain available for automation.
 
-`gitleap cli` and `gitleap ui` are explicit interactive aliases. Invoke the
-CLI without a command in a non-interactive shell to print help; explicit UI
-aliases still require a TTY.
+`gitleap cli` and `gitleap ui` are explicit interactive aliases. The default
+console and the `pull` pipeline require a TTY; use the scripted commands below
+for non-interactive automation.
 
 The UI contract and design tokens live in [`src/theme.ts`](src/theme.ts) and
 are covered by the terminal navigation tests.

@@ -9,7 +9,7 @@ process.on("uncaughtException", reportError);
 process.on("unhandledRejection", reportError);
 
 const args = Bun.argv.slice(2);
-const command = args[0] ?? (process.stdin.isTTY && process.stdout.isTTY ? "ui" : "help");
+const command = args[0] ?? "ui";
 const serverUrl = value("--server") ?? process.env.GITLEAP_SERVER_URL ?? "http://localhost:3000";
 const client = new GitLeapClient({
   serverUrl,
@@ -17,6 +17,8 @@ const client = new GitLeapClient({
 });
 
 if (command === "cli" || command === "ui" || command === "interactive") {
+  if (!process.stdin.isTTY || !process.stdout.isTTY)
+    throw new Error("The default GitLeap CLI UI requires an interactive terminal");
   await runInteractive(serverUrl);
   process.exit(0);
 } else if (command === "help" || command === "--help" || command === "-h") {
@@ -53,7 +55,15 @@ if (command === "login") {
   console.log(
     JSON.stringify({ output, checksum: artifact.checksum, expiresAt: artifact.expiresAt }, null, 2),
   );
-} else if (command === "run" || command === "pull") {
+} else if (command === "pull") {
+  if (!process.stdin.isTTY || !process.stdout.isTTY)
+    throw new Error("The pull pipeline requires an interactive terminal");
+  await runInteractive(serverUrl, {
+    initialUrl: required(1),
+    initialRevision: value("--revision") ?? "HEAD",
+    autoSubmit: true,
+  });
+} else if (command === "run") {
   const submitted = await client.submit({
     url: required(1),
     revision: value("--revision") ?? "HEAD",
