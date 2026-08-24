@@ -60,7 +60,7 @@ describe("interactive layout", () => {
     expect(preview?.width).toBeGreaterThan(0);
   });
 
-  test("drives the home menu with real mocked key events", async () => {
+  test("renders the landing page as the Step A route", async () => {
     const setup = await createTestRenderer({ width: 100, height: 30 });
     activeSetups.push(setup);
     const app = new InteractiveApp(
@@ -71,12 +71,8 @@ describe("interactive layout", () => {
     app.mount();
     await setup.renderOnce();
 
-    setup.mockInput.pressArrow("down");
-    setup.mockInput.pressEnter();
-    await setup.flush();
-
-    expect(setup.renderer.root.findDescendantById("view-submit")?.visible).toBe(true);
-    expect(setup.renderer.root.findDescendantById("view-home")?.visible).toBe(false);
+    expect(setup.renderer.root.findDescendantById("view-home")?.visible).toBe(true);
+    expect(setup.renderer.root.findDescendantById("view-submit")?.visible).toBe(false);
   });
 
   test("uses authoritative state after requesting pipeline cancellation", async () => {

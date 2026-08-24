@@ -40,8 +40,7 @@ export async function runInteractive(
 
 export class InteractiveApp {
   private screen: Screen = "home";
-  private menuIndex = 0;
-  private field: Field = "email";
+  private field: Field = "url";
   private values: Record<Field, string> = {
     email: process.env.GITLEAP_EMAIL ?? "",
     password: process.env.GITLEAP_PASSWORD ?? "",
@@ -58,7 +57,7 @@ export class InteractiveApp {
     jobId: 0,
     destination: 1,
   };
-  private message = "Choose an action.";
+  private message = "Enter a repository URL to begin.";
   private busy = false;
   private status:
     | { status: string; version: number; jobId: string; expiresAt: string | null }
@@ -266,8 +265,7 @@ export class InteractiveApp {
       return;
     }
     if (this.screen === "home") {
-      this.handleHome(key);
-      return;
+      if (this.handleLanding(key)) return;
     }
     if (this.screen === "pipeline") {
       this.handlePipeline(key);
@@ -333,27 +331,33 @@ export class InteractiveApp {
     }
   }
 
-  private handleHome(key: KeyEvent): void {
-    if (key.name === "up") this.menuIndex = wrapIndex(this.menuIndex - 1, 4);
-    else if (key.name === "down") this.menuIndex = wrapIndex(this.menuIndex + 1, 4);
-    else if (key.name === "return") {
-      if (this.menuIndex === 0) this.screen = "login";
-      if (this.menuIndex === 1) this.screen = "submit";
-      if (this.menuIndex === 2) this.screen = "status";
-      if (this.menuIndex === 3) {
-        this.exit();
-        return;
-      }
-      this.field = this.screen === "login" ? "email" : this.screen === "submit" ? "url" : "jobId";
+  private handleLanding(key: KeyEvent): boolean {
+    if (key.ctrl && key.name === "l") {
+      this.screen = "login";
+      this.field = "email";
+      this.render();
+    } else if (key.ctrl && key.name === "s") {
+      this.screen = "status";
+      this.field = "jobId";
+      this.render();
+    } else if (key.name === "return") {
+      this.screen = "submit";
+      void this.submitFieldForm();
+      return true;
+    } else if (key.name === "tab" || key.name === "down" || key.name === "up") {
+      this.moveField(key.name === "up" ? -1 : 1);
+      return true;
+    } else {
+      return false;
     }
-    this.render();
+    return true;
   }
 
   private moveField(direction: number): void {
     const fields: Field[] =
       this.screen === "login"
         ? ["email", "password"]
-        : this.screen === "submit"
+        : this.screen === "submit" || this.screen === "home"
           ? ["url", "revision"]
           : this.screen === "inject"
             ? ["destination"]
@@ -579,7 +583,7 @@ export class InteractiveApp {
       return;
     }
     this.screen = "home";
-    this.message = "Choose an action.";
+    this.message = "Enter a repository URL to begin.";
     this.render();
   }
 
@@ -599,20 +603,22 @@ export class InteractiveApp {
   }
 
   private renderLayout(): void {
-    const items = ["Authenticate", "Submit repository", "Inspect job status", "Quit"];
     this.homeContent.content = [
       "",
-      "GitLeap processing console",
+      "Step A  Initiating the Leap",
       "",
-      ...items.map((item, index) => `${index === this.menuIndex ? ICON.prompt : " "} ${item}`),
+      "Pass a public GitHub repository URL to start the live pipeline.",
       "",
-      "The CLI is the first product surface for the MVP.",
+      this.fieldLine("url"),
+      this.fieldLine("revision"),
+      "",
+      "Enter start  |  Tab or ↑↓ fields  |  Ctrl+L authenticate  |  Ctrl+S inspect job",
     ].join("\n");
 
     const fields: Field[] =
       this.screen === "login"
         ? ["email", "password"]
-        : this.screen === "submit"
+        : this.screen === "submit" || this.screen === "home"
           ? ["url", "revision"]
           : ["destination"];
     const formContent = [
