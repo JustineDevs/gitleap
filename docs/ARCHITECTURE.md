@@ -22,10 +22,10 @@ GitLeap is a TypeScript-first Bun/Turborepo monorepo. The current repository con
 - `apps/web`: browser onboarding, submission, status, and download over the same contract
 - `apps/fumadocs`: canonical published documentation
 
-The CLI interactive console is implemented with OpenTUI. Its design tokens and
-keyboard navigation live in `apps/cli/src/theme.ts`; the interaction contract
-is covered by the CLI tests and the canonical Fumadocs client documentation.
-Rezi is not used.
+The CLI interactive console is implemented with OpenTUI. Its framework-agnostic
+design tokens and keyboard math are owned by `@gitleap/design` and re-exported
+by `apps/cli/src/theme.ts`; the interaction contract is covered by the CLI and
+design package tests.
 
 ### Layer B: Transport
 
@@ -85,6 +85,8 @@ packages/
   db/                   Prisma client and schema
   env/                  environment validation
   config/               shared private configuration
+  design/               framework-agnostic tokens, sheen math, and navigation
+  oss-integrations/     Repomix and upstream writing-skill adapters
 docs/                   architecture and product records
 .internal/reference/    private pattern corpus
 ```

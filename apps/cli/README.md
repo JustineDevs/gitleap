@@ -15,8 +15,10 @@ flow is `gitleap auth login <token>` followed by `gitleap pull <github-url>`.
 The pull pipeline requires a TTY; use the scripted commands below for
 non-interactive automation.
 
-The UI contract and design tokens live in [`src/theme.ts`](src/theme.ts) and
-are covered by the terminal navigation tests.
+The UI contract is defined in the repository [`DESIGN.md`](../../DESIGN.md).
+The framework-agnostic tokens and terminal math live in
+[`packages/design`](../../packages/design) and are re-exported by
+[`src/theme.ts`](src/theme.ts) for the CLI.
 
 ## Run locally
 

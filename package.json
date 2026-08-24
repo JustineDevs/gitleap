@@ -47,7 +47,7 @@
     "db:studio": "turbo -F @gitleap/db db:studio",
     "db:generate": "turbo -F @gitleap/db db:generate",
     "db:migrate": "turbo -F @gitleap/db db:migrate",
-    "test": "bun run --filter server test && bun run --filter web test && bun run --filter @gitleap/api test && bun run --filter gitleap-cli test",
+    "test": "bun run --filter server test && bun run --filter web test && bun run --filter @gitleap/api test && bun run --filter gitleap-cli test && bun run --filter @gitleap/design test && bun run --filter @gitleap/oss-integrations test",
     "test:infra:up": "docker compose -f infra/docker-compose.test.yml up -d --wait",
     "test:infra:migrate": "DATABASE_URL=postgresql://gitleap:gitleap@localhost:55432/gitleap bunx --bun prisma migrate deploy --config packages/db/prisma.config.ts",
     "test:infra:upgrade": "sh infra/verify-migration-upgrade.sh",
@@ -73,7 +73,10 @@
     "secrets:scan": "gitleaks git --config .gitleaks.toml --redact --verbose",
     "secrets:scan:staged": "gitleaks git --config .gitleaks.toml --pre-commit --redact --staged --verbose",
     "check:execution-boundary": "bun scripts/check-execution-boundary.ts",
-    "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only"
+    "ruler:apply": "bunx @intellectronica/ruler@latest apply --local-only",
+    "oss:repomix": "bun packages/oss-integrations/src/cli.ts repomix",
+    "oss:install": "bun packages/oss-integrations/src/cli.ts install",
+    "oss:prompt": "bun packages/oss-integrations/src/cli.ts prompt"
   },
   "dependencies": {},
   "devDependencies": {

@@ -1,0 +1,4 @@
+{
+  "extends": "@gitleap/config/tsconfig.base.json",
+  "include": ["src"]
+}

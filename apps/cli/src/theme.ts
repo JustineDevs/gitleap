@@ -1,49 +1,16 @@
-export const COLOR = {
-  accent: "#00E5A3",
-  primary: "#7C3AED",
-  textNormal: "#F8FAFC",
-  textMuted: "#64748B",
-  bgCanvas: "#0B0F19",
-  good: "#00E5A3",
-  warn: "#F59E0B",
-  bad: "#EF4444",
-  border: "#1E293B",
-} as const;
+import { wrapStep } from "@gitleap/design";
 
-export const RULE = {
-  borderFocused: COLOR.accent,
-  borderUnfocused: COLOR.border,
-  dividerHorizontal: COLOR.border,
-} as const;
-
-export const GUTTER = { paddingLeft: 2, paddingRight: 2 } as const;
-
-export const SOURCE_STYLE = {
-  agents: { tag: "AGENT", hex: COLOR.primary },
-  skills: { tag: "SKILL", hex: COLOR.accent },
-  manifests: { tag: "JSON", hex: COLOR.warn },
-  tests: { tag: "TEST", hex: "#38BDF8" },
-} as const;
-
-export const SHEEN_CONFIG = {
-  SHEEN_PEAK: 1,
-  SHEEN_RADIUS: 6,
-  SHEEN_TICK_MS: 50,
-  SHEEN_SPEED: 0.4,
-  SHEEN_MAX: 100,
-} as const;
-
-export const ICON = {
-  success: "✓",
-  prompt: "❯",
-  pause: "⏸",
-  spinner: "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏",
-  folder: "📂",
-  primitive: "🔹",
-  manifest: "⚙",
-  guide: "📝",
-  package: "📦",
-} as const;
+export {
+  COLOR,
+  calculateSheenStep,
+  GUTTER,
+  getCellSheenFactor,
+  ICON,
+  lerpHex,
+  RULE,
+  SHEEN_CONFIG,
+  SOURCE_STYLE,
+} from "@gitleap/design";
 
 export function sanitizeTerminalText(value: string): string {
   let result = "";
@@ -77,52 +44,8 @@ export function sanitizeTerminalText(value: string): string {
   return result;
 }
 
-export function calculateSheenStep(
-  tickCounter: number,
-  totalWidth: number,
-): {
-  sheenPeriod: number;
-  sheenCenter: number;
-  sheenIntensity: number;
-} {
-  const currentStep = (tickCounter * SHEEN_CONFIG.SHEEN_SPEED) % SHEEN_CONFIG.SHEEN_MAX;
-  return {
-    sheenPeriod: SHEEN_CONFIG.SHEEN_MAX,
-    sheenCenter:
-      (currentStep / SHEEN_CONFIG.SHEEN_MAX) *
-        (Math.max(0, totalWidth) + SHEEN_CONFIG.SHEEN_RADIUS * 2) -
-      SHEEN_CONFIG.SHEEN_RADIUS,
-    sheenIntensity: SHEEN_CONFIG.SHEEN_PEAK,
-  };
-}
-
-function hexToRgb(hex: string): [number, number, number] {
-  const value = Number.parseInt(hex.replace(/^#/, ""), 16);
-  return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
-}
-
-export function lerpHex(from: string, to: string, alpha: number): string {
-  const [fr, fg, fb] = hexToRgb(from);
-  const [tr, tg, tb] = hexToRgb(to);
-  const a = Math.max(0, Math.min(1, alpha));
-  return `#${[fr, fg, fb]
-    .map((value, index) =>
-      Math.round(value + ([tr, tg, tb][index] - value) * a)
-        .toString(16)
-        .padStart(2, "0"),
-    )
-    .join("")}`.toUpperCase();
-}
-
-export function getCellSheenFactor(cellIndex: number, sheenCenter: number): number {
-  const distance = Math.abs(cellIndex - sheenCenter);
-  if (distance >= SHEEN_CONFIG.SHEEN_RADIUS) return 0;
-  return 0.5 * (1 + Math.cos((Math.PI * distance) / SHEEN_CONFIG.SHEEN_RADIUS));
-}
-
 export function wrapIndex(index: number, length: number): number {
-  if (length <= 0) return 0;
-  return ((index % length) + length) % length;
+  return wrapStep(index, 0, length);
 }
 
 export type PipelineStage = {

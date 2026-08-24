@@ -1,0 +1,24 @@
+{
+  "name": "@gitleap/oss-integrations",
+  "version": "0.1.0",
+  "description": "GitLeap integrations for Repomix and writing-quality skills",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./cli": {
+      "default": "./src/cli.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "test": "bun test src"
+  },
+  "devDependencies": {
+    "@gitleap/config": "workspace:*",
+    "@types/bun": "catalog:",
+    "repomix": "^1.10.0",
+    "typescript": "^6.0.3"
+  }
+}

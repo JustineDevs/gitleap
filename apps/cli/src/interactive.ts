@@ -1,7 +1,15 @@
 import { Box, createCliRenderer, type KeyEvent, Text } from "@opentui/core";
 import { fetchVerifiedArtifact, GitLeapClient, type ProcessingDetails } from "./client";
 import { readSession, writeSession } from "./session";
-import { COLOR, ICON, pipelineStages, sanitizeTerminalText, wrapIndex } from "./theme";
+import {
+  COLOR,
+  GUTTER,
+  ICON,
+  pipelineStages,
+  RULE,
+  sanitizeTerminalText,
+  wrapIndex,
+} from "./theme";
 
 type Screen = "home" | "login" | "submit" | "status" | "pipeline" | "explorer" | "inject";
 type Field = "email" | "password" | "url" | "revision" | "jobId" | "destination";
@@ -96,7 +104,7 @@ export class InteractiveApp {
         id: "gitleap-root",
         flexDirection: "column",
         gap: 1,
-        padding: 1,
+        padding: GUTTER.paddingLeft,
         backgroundColor: COLOR.bgCanvas,
       },
       Box(
@@ -110,7 +118,7 @@ export class InteractiveApp {
           borderColor: COLOR.accent,
           flexGrow: 1,
           flexDirection: "column",
-          padding: 1,
+          padding: GUTTER.paddingLeft,
         },
         Box(
           { id: "view-home", flexDirection: "column", flexGrow: 1 },
@@ -141,10 +149,10 @@ export class InteractiveApp {
               id: "pipeline-grid",
               border: true,
               borderStyle: "rounded",
-              borderColor: COLOR.border,
+              borderColor: RULE.borderUnfocused,
               flexDirection: "column",
               flexGrow: 1,
-              paddingX: 1,
+              paddingX: GUTTER.paddingLeft,
             },
             ...Array.from({ length: 5 }, (_, index) =>
               Text({ id: `pipeline-stage-text-${index}`, content: "", fg: COLOR.textNormal }),
@@ -169,11 +177,11 @@ export class InteractiveApp {
                 id: "explorer-skills-panel",
                 border: true,
                 borderStyle: "rounded",
-                borderColor: COLOR.border,
+                borderColor: RULE.borderUnfocused,
                 flexGrow: 1,
                 flexBasis: 24,
                 minWidth: 20,
-                padding: 1,
+                padding: GUTTER.paddingLeft,
               },
               Text({ id: "explorer-skills", content: "", fg: COLOR.textNormal }),
             ),
@@ -182,11 +190,11 @@ export class InteractiveApp {
                 id: "explorer-detail-panel",
                 border: true,
                 borderStyle: "rounded",
-                borderColor: COLOR.border,
+                borderColor: RULE.borderUnfocused,
                 flexGrow: 2,
                 flexBasis: 32,
                 minWidth: 24,
-                padding: 1,
+                padding: GUTTER.paddingLeft,
               },
               Text({ id: "explorer-detail", content: "", fg: COLOR.textNormal }),
             ),
@@ -198,14 +206,19 @@ export class InteractiveApp {
               borderStyle: "rounded",
               borderColor: COLOR.primary,
               height: 7,
-              padding: 1,
+              padding: GUTTER.paddingLeft,
             },
             Text({ id: "explorer-preview", content: "", fg: COLOR.textNormal }),
           ),
         ),
       ),
       Box(
-        { borderStyle: "rounded", borderColor: COLOR.border, height: 3, paddingX: 1 },
+        {
+          borderStyle: "rounded",
+          borderColor: RULE.borderUnfocused,
+          height: 3,
+          paddingX: GUTTER.paddingLeft,
+        },
         Text({ id: "gitleap-footer", content: "", fg: COLOR.textMuted }),
       ),
     );

@@ -34,7 +34,9 @@ gitleap/
 │   ├── auth/
 │   ├── db/
 │   ├── env/
-│   └── config/
+│   ├── config/
+│   ├── design/
+│   └── oss-integrations/
 ├── docs/
 ├── .internal/reference/
 ├── package.json
@@ -55,6 +57,8 @@ gitleap/
 | `@gitleap/db` | Prisma client and auth schema | database access |
 | `@gitleap/env` | server/web environment validation | runtime configuration |
 | `@gitleap/config` | private shared configuration | package-specific config |
+| `@gitleap/design` | exact design tokens, color math, sheen math, and navigation math | framework-agnostic design contract |
+| `@gitleap/oss-integrations` | Repomix execution and stop-slop/humanizer-zh skill installation and prompt preparation | safe command adapters |
 | `apps/server/src/processing` | implemented identity, state, source, indexing, synthesis, compilation, storage, recovery, and queue modules | server processing contract |
 | `apps/cli/src` | implemented token/session auth, `pull`, scripted commands, and OpenTUI Step A/B/C flow | CLI command and TUI contract |
 
@@ -97,6 +101,10 @@ bun run format
 bun run knip
 bun run secrets:scan
 bun run test
+bun run oss:repomix
+bun run oss:install -- stop-slop
+bun run oss:install -- humanizer-zh
+bun run oss:prompt -- stop-slop --input docs/DRAFT.md
 ```
 
 Processing is already implemented inside `apps/server/src/processing`. The

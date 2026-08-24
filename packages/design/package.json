@@ -1,0 +1,29 @@
+{
+  "name": "@gitleap/design",
+  "version": "0.1.0",
+  "description": "Framework-agnostic GitLeap design tokens and terminal math",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./theme": {
+      "default": "./src/theme.ts"
+    },
+    "./sheen": {
+      "default": "./src/sheen.ts"
+    },
+    "./move": {
+      "default": "./src/move.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "test": "bun test src"
+  },
+  "devDependencies": {
+    "@gitleap/config": "workspace:*",
+    "@types/bun": "catalog:",
+    "typescript": "^6.0.3"
+  }
+}

@@ -15,7 +15,8 @@
     "pg",
     "dotenv",
     "zod",
-    "@tailwindcss/vite"
+    "@tailwindcss/vite",
+    "repomix"
   ],
   "workspaces": {
     ".": {
