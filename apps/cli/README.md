@@ -44,9 +44,10 @@ bun run dev:cli -- download <job-id> --output ./artifacts/job.tar.gz
 bun run dev:cli -- run https://github.com/org/repo --revision <commit-sha>
 ```
 
-`run` and `pull` submit and poll until a terminal state. `pull` sends `HEAD` by
-default; the server resolves it to an immutable commit before processing. Both
-exit non-zero unless the job reaches `ready`; neither downloads automatically.
+`run` submits and polls until a terminal state. `pull` opens the interactive
+pipeline, sends `HEAD` by default, and exits non-zero unless the job reaches
+`ready`; the server resolves `HEAD` to an immutable commit before processing.
+Neither command downloads automatically.
 Use `download` after a ready result.
 
 ## Build

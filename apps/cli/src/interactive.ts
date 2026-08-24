@@ -11,8 +11,13 @@ const EXPLORER_TABS = ["Skills", "Schema Config", "Blueprint Engine", "System Di
 
 export async function runInteractive(
   serverUrl: string,
-  options?: { initialUrl?: string; initialRevision?: string; autoSubmit?: boolean },
-): Promise<void> {
+  options?: {
+    initialUrl?: string;
+    initialRevision?: string;
+    autoSubmit?: boolean;
+    sessionCookie?: string;
+  },
+): Promise<string | undefined> {
   const renderer = await createCliRenderer({
     exitOnCtrlC: true,
     backgroundColor: COLOR.bgCanvas,
@@ -20,14 +25,17 @@ export async function runInteractive(
   });
   const app = new InteractiveApp(
     renderer,
-    new GitLeapClient({ serverUrl, sessionCookie: readSession() }),
+    new GitLeapClient({
+      serverUrl,
+      sessionCookie: options?.sessionCookie ?? readSession(),
+    }),
     serverUrl,
   );
   app.mount();
   if (options?.autoSubmit && options.initialUrl) {
     void app.startPull(options.initialUrl, options.initialRevision ?? "HEAD");
   }
-  await new Promise<void>((resolve) => (app.onExit = resolve));
+  return new Promise<string | undefined>((resolve) => (app.onExit = resolve));
 }
 
 export class InteractiveApp {
@@ -75,7 +83,7 @@ export class InteractiveApp {
   private explorerSkills!: UiNode;
   private explorerDetail!: UiNode;
   private explorerPreview!: UiNode;
-  onExit: () => void = () => undefined;
+  onExit: (status?: string) => void = () => undefined;
 
   constructor(
     private readonly renderer: Awaited<ReturnType<typeof createCliRenderer>>,
@@ -577,7 +585,7 @@ export class InteractiveApp {
 
   private exit(): void {
     this.renderer.destroy();
-    this.onExit();
+    this.onExit(this.status?.status);
   }
 
   private render(): void {
@@ -740,8 +748,7 @@ export class InteractiveApp {
     this.explorerDetail.content = ["Schema Detail (8 cols)", "", ...detail, "", ...metrics].join(
       "\n",
     );
-    const instructions = selected?.instructions ?? description;
-    const previewLines = instructions.split("\n").slice(0, 4);
+    const previewLines = description.split("\n").slice(0, 4);
     this.explorerPreview.content = [
       `Code Blueprint Preview  ${skill}/SKILL.md`,
       ...previewLines.map(

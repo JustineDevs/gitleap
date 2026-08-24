@@ -58,11 +58,13 @@ if (command === "login") {
 } else if (command === "pull") {
   if (!process.stdin.isTTY || !process.stdout.isTTY)
     throw new Error("The pull pipeline requires an interactive terminal");
-  await runInteractive(serverUrl, {
+  const status = await runInteractive(serverUrl, {
     initialUrl: required(1),
     initialRevision: value("--revision") ?? "HEAD",
     autoSubmit: true,
+    sessionCookie: process.env.GITLEAP_SESSION_COOKIE ?? readSession(),
   });
+  if (status !== "ready") process.exitCode = 1;
 } else if (command === "run") {
   const submitted = await client.submit({
     url: required(1),

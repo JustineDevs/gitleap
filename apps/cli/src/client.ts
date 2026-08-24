@@ -69,7 +69,6 @@ export type ProcessingDetails = {
     id: string;
     name: string;
     description: string;
-    instructions?: string;
     triggers: string[];
     inputs: string[];
     outputs: string[];
