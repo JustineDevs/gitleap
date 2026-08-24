@@ -2,7 +2,9 @@
 
 ## 1. Purpose
 
-This document maps the complete intended monorepo. It separates current packages from planned packages so the tree is useful for implementation without pretending the product is already complete.
+This document maps the tracked monorepo and separates implemented code from
+planned extraction. It is an evidence map, not a promise that every planned
+directory already exists.
 
 ## 2. Repository Tree
 
@@ -18,31 +20,21 @@ gitleap/
 │   ├── server/
 │   │   └── src/
 │   │       ├── index.ts
-│   │       └── lib/
-│   │           ├── queue.ts
-│   │           ├── workers.ts
-│   │           ├── rate-limit.ts
-│   │           ├── tracing.ts
-│   │           └── posthog.ts
-│   ├── tui/
-│   │   └── src/index.ts
+│   │       ├── worker.ts
+│   │       ├── lib/
+│   │       └── processing/
 │   ├── fumadocs/
 │   │   ├── src/app/
 │   │   └── content/docs/
-│   └── fumadocs/
-│       ├── src/app/
-│       └── content/docs/
+│   └── cli/
+│       ├── README.md
+│       └── src/
 ├── packages/
 │   ├── api/
 │   ├── auth/
 │   ├── db/
 │   ├── env/
-│   ├── config/
-│   ├── processing/       # planned
-│   ├── source-github/    # planned
-│   ├── indexer/          # planned
-│   ├── compiler/         # planned
-│   └── adapters/         # planned only if multiple implementations justify it
+│   └── config/
 ├── docs/
 ├── .internal/reference/
 ├── package.json
@@ -54,7 +46,7 @@ gitleap/
 └── .gitleaks.toml
 ```
 
-## 3. Current Package Map
+## 3. Current Package and Module Map
 
 | Package | Current responsibility | Contract owner |
 | --- | --- | --- |
@@ -63,15 +55,17 @@ gitleap/
 | `@gitleap/db` | Prisma client and auth schema | database access |
 | `@gitleap/env` | server/web environment validation | runtime configuration |
 | `@gitleap/config` | private shared configuration | package-specific config |
+| `apps/server/src/processing` | implemented identity, state, source, indexing, synthesis, compilation, storage, recovery, and queue modules | server processing contract |
+| `apps/cli/src` | implemented token/session auth, `pull`, scripted commands, and OpenTUI Step A/B/C flow | CLI command and TUI contract |
 
-## 4. Planned Package Map
+## 4. Planned Package Extraction
 
 | Package | Responsibility | First reason to create |
 | --- | --- | --- |
-| `@gitleap/processing` | job lifecycle and stage orchestration | first processing endpoint |
-| `@gitleap/source-github` | public GitHub commit fetch | first source adapter |
-| `@gitleap/indexer` | inventory and structural index | first parser implementation |
-| `@gitleap/compiler` | skills, manifest, provenance, archive | first artifact test |
+| `@gitleap/processing` | job lifecycle and stage orchestration | processing module becomes shared by more than the server |
+| `@gitleap/source-github` | public GitHub commit fetch | source adapter needs an independent consumer |
+| `@gitleap/indexer` | inventory and structural index | parser needs an independent consumer or a second implementation |
+| `@gitleap/compiler` | skills, manifest, provenance, archive | compiler needs an independent consumer |
 | `@gitleap/contracts` | shared domain schemas if `api` becomes overloaded | only when multiple consumers need them |
 
 Do not create every planned package up front. Start with the smallest module that preserves locality and testability.
@@ -105,7 +99,8 @@ bun run secrets:scan
 bun run test
 ```
 
-Required additions when processing starts:
+Processing is already implemented inside `apps/server/src/processing`. The
+following are planned command names, not current root scripts:
 
 ```text
 bun run test:processing
@@ -153,7 +148,9 @@ Claims durable jobs, performs static processing, compiles artifacts, writes stor
 7. Changesets versioning
 8. publish/deploy from approved branch
 
-The current server build has an existing `unrun` import problem; this must be fixed or explicitly isolated before claiming a green production build.
+The current repository has a separate worker build and a local validation
+matrix. A release must run the actual root scripts and must not infer a hosted
+deployment result from a local build.
 
 ## 10. Documentation Ownership
 

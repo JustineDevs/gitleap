@@ -18,7 +18,7 @@ GitLeap is a TypeScript-first Bun/Turborepo monorepo. The current repository con
 
 ### Layer A: Client surfaces
 
-- `apps/cli`: first product client with OpenTUI interactive and non-interactive authentication, submission, status, cancellation, and download surfaces
+- `apps/cli`: first product client with token/session authentication, scripted submission/status/cancellation/download commands, and the integrated OpenTUI Step A/B/C flow
 - `apps/web`: browser onboarding, submission, status, and download over the same contract
 - `apps/fumadocs`: canonical published documentation
 
@@ -32,7 +32,10 @@ Rezi is not used.
 - `apps/server/src/index.ts`: Hono lifecycle, CORS, auth route, tRPC mount, tracing
 - `packages/api`: context, public/protected procedures, typed request contract
 
-The transport layer validates input, authorization, and public projections. Retry, queue, lease, and stage execution remain in the processing module; transport lifecycle queries use the same Postgres contracts until the repository service extraction is complete.
+The transport layer validates input, authorization, and public projections.
+Retry, queue, lease, and stage execution remain in
+`apps/server/src/processing`; transport lifecycle queries use the same Postgres
+contracts until a shared processing package is justified.
 
 ### Layer C: Domain processing
 
@@ -53,10 +56,9 @@ Responsibilities:
 - GitHub source adapter
 - Prisma job store
 - BullMQ/Redis queue adapter
-- static indexer
+- deterministic `v1-lexical` static indexer
 - model adapter
 - Supabase Storage artifact adapter
-- polling or streaming progress adapter
 
 ### Layer E: Persistence and infrastructure
 
@@ -64,6 +66,10 @@ Responsibilities:
 - Supabase Storage
 - Redis or Upstash Redis
 - OpenTelemetry and application event telemetry
+
+Client polling is a presentation concern: the CLI uses a fixed interval and
+the web client uses bounded backoff intervals. Both project the same public
+status contract; streaming is deferred.
 
 ## Monorepo Structure
 
@@ -115,7 +121,13 @@ sequenceDiagram
 ## State and Failure Model
 
 ```text
-Job state is authoritative as `queued -> claimed -> processing -> ready`, with `queued/claimed/processing -> cancel_requested -> cancelled`, retryable failure returning to `queued`, terminal failure becoming `failed`, and `ready -> expired`. The names `fetched`, `indexed`, `sliced`, `synthesized`, `validated-output`, `compiled`, and `stored` are `JobStage` values, not job states.
+Job state is authoritative as `queued -> claimed -> processing -> ready`, with
+`queued/claimed/processing -> cancel_requested -> cancelled`, retryable failure
+returning to `queued`, terminal failure becoming `failed`, and `ready ->
+expired`. The names `fetched`, `indexed`, `sliced`, `synthesized`,
+`validated-output`, `compiled`, and `stored` are `JobStage` values, not job
+states. The CLI renders these stages through fixed-interval polling; it does not use a
+WebSocket transport today.
 ```
 
 Retryable failures return to `queued` with incremented attempt and backoff. Terminal failures become `failed` with a safe error code. Worker leases and monotonic versions prevent stale workers from changing terminal state.

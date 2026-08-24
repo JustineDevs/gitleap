@@ -14,13 +14,16 @@ gitleap pull https://github.com/owner/repository
 
 `pull` renders the live pipeline and opens the interactive dashboard only after
 processing reaches `ready`. The compiled `gitleap` binary, not Bun, is the
-public client. Local development can run `bun run dev:cli`.
+public client. The local server maps that opaque bearer value through its Better
+Auth session lookup; hosted OAuth, installer delivery, and token issuance are
+deployment boundaries rather than local server behavior. Local development can
+run `bun run dev:cli`.
 
 The dashboard supports:
 
-- API-token authentication with a mode-600 session file under `$XDG_CONFIG_HOME/gitleap/session`
+- opaque bearer-token authentication with a mode-600 session file under `$XDG_CONFIG_HOME/gitleap/session`
 - public GitHub URL and revision submission
-- live pipeline stage inspection and bounded polling
+- live pipeline stage inspection and polling with bounded request intervals
 - cooperative cancellation with a state-version check
 - artifact download and archive injection into an existing directory
 - keyboard navigation with resize-aware pipeline and explorer grids

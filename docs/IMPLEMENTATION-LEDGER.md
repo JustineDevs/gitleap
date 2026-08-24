@@ -18,7 +18,7 @@ credentialed hosted-provider check.
 | Model boundary | One configured adapter, redaction, schema/evidence/path validation, token/cost/deadline limits, deterministic idempotency key | model suite, pipeline smoke | Credentialed real provider run |
 | Artifact compiler | Deterministic gzip archive, manifest, provenance, architecture map, validation tests, checksum | compiler extraction/validator suite, pipeline smoke | Hosted artifact download |
 | Storage | Private Supabase adapter, checksum-preserving writes, object-bound signed paths, expiry-bounded URLs, cleanup | storage/API suites, cleanup smoke | Credentialed private-bucket smoke |
-| Clients | Web submit/status/download, bounded polling, interactive OpenTUI CLI, CLI CSRF header, checksum-verified download and safe injection | web/CLI suites, HTTP lifecycle smoke | Manual TTY and browser E2E |
+| Clients | Web submit/status/download, polling with bounded request intervals, interactive OpenTUI CLI, CLI CSRF header, checksum-verified download and safe injection | web/CLI suites, HTTP lifecycle smoke | Manual TTY and browser E2E |
 | Operations | Arcjet request limits, quota/cost limits, retention cleanup with expiry audit, OpenTelemetry spans/export, safe error codes | infra smokes, cleanup smoke, `smoke:otel`, Gitleaks | Hosted dashboards and alert delivery |
 
 ## Validation Commands

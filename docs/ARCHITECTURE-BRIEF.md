@@ -21,7 +21,12 @@ The current repository has the web client, Hono server, Better Auth, Prisma proc
 - `apps/server/src/worker.ts` is a separate worker entrypoint and is not imported by HTTP startup.
 - `apps/server/src/lib/rate-limit.ts` is mounted on auth and tRPC routes.
 - `apps/server/src/processing/indexer.ts` owns the deterministic MVP `v1-lexical` parser and architecture-map contract; Tree-sitter remains a V2 expansion.
-- `README.md` contains broader product direction; MVP claims are bounded by `docs/MVP.md`, `docs/ROADMAP.md`, and the ADR set.
+- `README.md` is the product target and data-flow narrative. The current
+  implementation boundary is stated explicitly in `docs/MVP.md`, this
+  architecture gate, and the ADR set. Tree-sitter, WebSockets, the README's
+  `gitleap.com` URL-transformation entrypoint,
+  and hosted onboarding are external or future boundaries and are not shipped
+  by this repository.
 
 ## User and Workload Assumptions
 

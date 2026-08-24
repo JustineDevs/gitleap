@@ -58,7 +58,7 @@ The system problem is therefore a pipeline problem, not a prompt-only problem:
 
 | Thesis | Consequence |
 | --- | --- |
-| Static analysis before model work | Tree-sitter or equivalent parsing owns structure; the LLM does not discover the whole tree from raw text. |
+| Static analysis before model work | The verified MVP uses a deterministic lexical indexer; Tree-sitter is the README target for a later parser expansion. The LLM never discovers the whole tree from raw text. |
 | Source is untrusted data | No repository scripts, package managers, build hooks, or generated code execute in the worker. |
 | One canonical job identity | Database uniqueness and deterministic keys prevent duplicate processing. |
 | Thin transport | Hono and tRPC expose commands and queries; they do not own pipeline orchestration. |
@@ -73,10 +73,9 @@ The system problem is therefore a pipeline problem, not a prompt-only problem:
 
 | Application | Current role | Entry points |
 | --- | --- | --- |
-| `apps/cli` | First TypeScript/Bun client for login, submission, status, cancellation, and download | `src/index.ts`, `src/client.ts` |
+| `apps/cli` | First TypeScript/Bun client for token/session login, submission, status, cancellation, download, and the interactive Step A/B/C flow | `src/index.ts`, `src/client.ts`, `src/interactive.ts` |
 | `apps/web` | Vite React client with React Router, TanStack Query, and tRPC | `src/main.tsx`, `src/router.tsx`, `src/app-shell.tsx` |
 | `apps/server` | Bun-compatible Hono ingress with Better Auth and tRPC | `src/index.ts` |
-| `apps/cli` | OpenTUI interactive and command-line client | `src/index.ts`, `src/interactive.ts` |
 | `apps/fumadocs` | Canonical Fumadocs documentation app | `src/app/`, `content/docs/` |
 
 ### Implemented packages
@@ -92,8 +91,7 @@ The system problem is therefore a pipeline problem, not a prompt-only problem:
 ### Existing operational helpers
 
 - `apps/server/src/lib/rate-limit.ts` applies Arcjet protection to authentication and tRPC routes.
-- `apps/server/src/lib/tracing.ts` initializes OpenTelemetry tracing and stream-aware spans.
-- `apps/server/src/lib/posthog.ts` provides lazy analytics helpers but is not part of the default request path.
+- `apps/server/src/lib/tracing.ts` initializes OpenTelemetry tracing and job spans.
 
 These helpers are reusable evidence, not proof that GitLeap processing exists.
 
@@ -118,7 +116,7 @@ flowchart TD
   User --> Web
   User --> CLI
   Web --> Ingress
-  TUI --> Ingress
+  CLI --> Ingress
   Ingress --> Contract
   Ingress --> Auth
   Contract --> DB
@@ -349,7 +347,8 @@ Required test layers:
 8. Add manifest and artifact compilation without model output first.
 9. Add Supabase Storage and authorized downloads.
 10. Add validation, security checks, observability, and recovery tests.
-11. Add progress streaming only after polling is correct.
+11. Add progress streaming only after polling is correct; the current CLI
+    renders stage progress through fixed-interval status polling.
 12. Add private repositories, more providers, and stronger isolation only after measured need.
 
 ## 18. Non-Goals
@@ -362,4 +361,13 @@ Required test layers:
 
 ## 19. Architecture Conclusion
 
-GitLeap is implemented as a deterministic compiler-like processing pipeline with a small transport seam, a deep processing module, explicit adapters, durable state, private immutable artifacts, and evidence-backed generated documentation. The verified MVP boundary is the public GitHub, polling, and authorized-download flow described in `README.md`; expansion claims remain roadmap work.
+GitLeap is implemented as a deterministic compiler-like processing pipeline with
+a small transport seam, a deep processing module, explicit adapters, durable
+state, private immutable artifacts, and evidence-backed generated
+documentation. The verified local MVP boundary is public GitHub input,
+deterministic `v1-lexical` indexing, one configured bounded model adapter,
+polling, and authorized download. The baseline compiler is an explicitly
+opt-in non-production path used by tests and smokes; it is not the production
+synthesis path. The README's
+Tree-sitter, WebSocket, hosted installer, and hosted token-issuance behavior
+remain product targets until their release evidence exists.

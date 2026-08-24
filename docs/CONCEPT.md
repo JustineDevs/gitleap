@@ -66,13 +66,20 @@ The compiler metaphor creates useful constraints:
 ### First release experience
 
 ```text
-Sign in
-  -> submit public repository URL and commit
-  -> receive job identifier
-  -> observe queued/running status
-  -> inspect completion metadata
-  -> download private archive
+Web onboarding or an existing session token
+  -> `gitleap auth login <token>`
+  -> `gitleap pull <public repository URL>`
+  -> Step A submission screen
+  -> Step B fixed-interval polling and stage progress
+  -> Step C interactive Skills Explorer when ready
+  -> explicitly download the private archive
 ```
+
+The web client exposes the same authenticated submit/status/download contract.
+The hosted installer, OAuth provider, and token issuer are deployment
+boundaries; the repository contains the client and server contract, not the
+hosted website implementation. Locally, a pre-existing server-issued session
+token or the documented development login is required.
 
 The first release should use status polling. A streaming progress protocol is useful, but it should not be allowed to destabilize the durable state model.
 

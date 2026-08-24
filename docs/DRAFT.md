@@ -1,6 +1,8 @@
 # GitLeap Product and Technical Draft
 
-> This is the working draft for the first GitLeap release. It converts the concept into an implementation-shaped product slice while preserving explicit assumptions and open decisions.
+> This draft is retained as the first-release contract record. The repository
+> now implements the CLI-first MVP described below; current evidence lives in
+> `docs/MVP.md`, `docs/IMPLEMENTATION-LEDGER.md`, and the ADRs.
 
 ## 1. Draft Thesis
 
@@ -78,7 +80,10 @@ The public contract must not expose raw source, prompts, credentials, stack trac
 
 ### Stage C: Structure
 
-- parse supported languages with Tree-sitter or an equivalent parser
+- run the deterministic `v1-lexical` TypeScript/JavaScript/JSON/Markdown
+  indexer used by the MVP
+- reserve Tree-sitter AST processing for a versioned expansion that preserves
+  the same evidence schema
 - construct symbol and relationship records
 - retain source locations
 - emit a compact architecture map
@@ -148,7 +153,7 @@ A skill is publishable only when it has:
 | Queue | BullMQ with Redis; use Upstash Redis for hosted coordination if appropriate |
 | Storage | Supabase Storage private bucket |
 | Docs | `apps/fumadocs` canonical Fumadocs app |
-| TUI | Defer beyond scaffold; it is distinct from the first-class CLI |
+| TUI | Implemented inside the first-class CLI as the Step A/B/C interactive flow |
 | Progress | Polling first; streaming later |
 
 ## 8. Explicit Non-Goals
@@ -160,16 +165,23 @@ A skill is publishable only when it has:
 - guarantee of semantic correctness
 - automatic publication of unreviewed generated skills to a public catalog
 
-## 9. Open Draft Decisions
+## 9. Remaining Decisions and Explicit Boundaries
 
-1. exact supported languages for the first parser release
-2. model provider and data-retention terms
-3. maximum repository size and processing budget
-4. artifact retention and signed URL lifetime
-5. job cancellation behavior
-6. whether a failed job can be manually retried
-7. final database schema and transactional outbox implementation
+1. model provider data-retention terms for a hosted deployment
+2. hosted installer and token-issuance boundary
+3. maximum repository size and processing budget tuning
+4. credentialed Supabase private-bucket verification
+5. Tree-sitter parser expansion, if lexical coverage proves insufficient
+6. streaming progress projection after polling remains stable
+
+The first parser set, artifact retention, cancellation behavior, schema, and
+transactional outbox are implementation decisions covered by the MVP and ADRs;
+they are not open design questions anymore.
 
 ## 10. Draft Exit Condition
 
-This draft becomes implementation-ready when `ADAPTER-CONTRACT.md`, the persistence model, the state transition table, and the security blockers in the vet review agree on the same public contract.
+The draft is implementation-ready for the documented MVP because
+`ADAPTER-CONTRACT.md`, the persistence model, the state transition table, and
+the security decisions in the ADRs agree on the same public contract. Hosted
+installer/token issuance, Tree-sitter, and streaming remain explicit expansion
+boundaries.

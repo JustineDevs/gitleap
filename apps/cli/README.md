@@ -1,7 +1,8 @@
 # GitLeap CLI
 
-The installed `gitleap` binary is the first product client for the MVP. After
-installation, save the API token issued by the web onboarding flow, then use
+The installed `gitleap` binary is the first product client for the MVP. The
+hosted product flow issues a bearer token during web onboarding; after
+installation, save it and use
 `gitleap pull` from a normal terminal. It shows the live ingestion pipeline and
 opens the interactive Skills Explorer only after compilation completes.
 
@@ -32,8 +33,12 @@ Set `GITLEAP_SERVER_URL` when the server is not at `http://localhost:3000`.
 gitleap auth login <token>
 ```
 
-The token is stored in the mode-600 session file and sent only as an HTTPS
-Bearer credential. Email/password login remains available for local development:
+The token is stored in the mode-600 session file and sent as a Bearer
+credential. Hosted endpoints must use HTTPS; local development defaults to
+`http://localhost:3000`. The local server maps that opaque bearer value through
+its Better Auth session lookup; hosted OAuth, installer delivery, and token
+issuance are deployment boundaries outside this repository. Email/password
+login remains available for local development:
 
 ```bash
 GITLEAP_EMAIL=you@example.com GITLEAP_PASSWORD='password' \
