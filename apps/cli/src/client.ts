@@ -170,7 +170,9 @@ export class GitLeapClient {
     headers.set("content-type", "application/json");
     if (init.method === "POST") headers.set("x-gitleap-client", "cli");
     else headers.set("origin", this.serverUrl);
-    if (this.sessionCookie) headers.set("cookie", this.sessionCookie);
+    if (this.sessionCookie?.startsWith("token:"))
+      headers.set("authorization", `Bearer ${this.sessionCookie.slice("token:".length)}`);
+    else if (this.sessionCookie) headers.set("cookie", this.sessionCookie);
     const response = await fetch(url, { ...init, headers });
     const body = (await response.json()) as TrpcResult<T>;
     if (!response.ok || body.error || body.result?.data === undefined)

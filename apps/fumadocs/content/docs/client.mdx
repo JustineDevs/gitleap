@@ -5,9 +5,20 @@ description: Submit, monitor, cancel, and download a generated pack.
 
 ## Interactive CLI
 
-Run `gitleap` or `bun run dev:cli` in a terminal. The interactive console supports:
+After installation, authenticate once and run the normal terminal flow:
 
-- email/password authentication with a mode-600 session file under `$XDG_CONFIG_HOME/gitleap/session`
+```bash
+gitleap auth login <token>
+gitleap pull https://github.com/owner/repository
+```
+
+`pull` renders the live pipeline and opens the interactive dashboard only after
+processing reaches `ready`. The compiled `gitleap` binary, not Bun, is the
+public client. Local development can run `bun run dev:cli`.
+
+The dashboard supports:
+
+- API-token authentication with a mode-600 session file under `$XDG_CONFIG_HOME/gitleap/session`
 - public GitHub URL and revision submission
 - live pipeline stage inspection and bounded polling
 - cooperative cancellation with a state-version check

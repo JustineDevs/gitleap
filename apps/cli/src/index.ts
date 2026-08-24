@@ -23,12 +23,17 @@ if (command === "cli" || command === "ui" || command === "interactive") {
   process.exit(0);
 } else if (command === "help" || command === "--help" || command === "-h") {
   console.log(
-    "GitLeap CLI\n\nCommands:\n  cli | ui                              open the interactive terminal console\n  login [--email EMAIL]                  authenticate and save a session\n  submit <github-url> --revision SHA     submit a repository\n  status <job-id>                        show processing status\n  cancel <job-id> --version N            cancel a queued/running job\n  download <job-id> [--output FILE]      download the authorized pack\n  run | pull <github-url> [--revision SHA] submit and wait for completion\n\nEnvironment:\n  GITLEAP_SERVER_URL       server URL (default: http://localhost:3000)\n  GITLEAP_EMAIL            login email\n  GITLEAP_PASSWORD         login password\n  GITLEAP_SESSION_COOKIE   override the stored session\n",
+    "GitLeap CLI\n\nCommands:\n  auth login <token>                      save an installation API token\n  pull <github-url> [--revision SHA]      show live progress, then open the dashboard\n  cli | ui                                open the interactive console\n  login [--email EMAIL]                   authenticate with email/password\n  submit <github-url> --revision SHA      submit a repository\n  status <job-id>                         show processing status\n  cancel <job-id> --version N             cancel a queued/running job\n  download <job-id> [--output FILE]       download the authorized pack\n  run <github-url> [--revision SHA]       submit and poll without the dashboard\n\nEnvironment:\n  GITLEAP_SERVER_URL       server URL (default: http://localhost:3000)\n  GITLEAP_EMAIL            login email\n  GITLEAP_PASSWORD         login password\n  GITLEAP_SESSION_COOKIE   override the stored session\n",
   );
   process.exit(0);
 }
 
-if (command === "login") {
+if (command === "auth") {
+  if (args[1] !== "login") throw new Error("Usage: gitleap auth login <token>");
+  const token = required(2);
+  writeSession(`token:${token}`);
+  console.log("API token saved.");
+} else if (command === "login") {
   const email = value("--email") ?? process.env.GITLEAP_EMAIL;
   const password = process.env.GITLEAP_PASSWORD;
   if (!email || !password)

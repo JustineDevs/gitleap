@@ -25,6 +25,25 @@ describe("GitLeap CLI client", () => {
     }
   });
 
+  it("sends installation tokens as bearer credentials", async () => {
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async (_input, init) => {
+      expect(new Headers(init?.headers).get("authorization")).toBe("Bearer install-token");
+      return new Response(
+        JSON.stringify({ result: { data: { jobId: "job-1", status: "queued", reused: false } } }),
+        { status: 200 },
+      );
+    }) as typeof fetch;
+    try {
+      await new GitLeapClient({
+        serverUrl: "http://localhost:3000",
+        sessionCookie: "token:install-token",
+      }).submit({ url: "https://github.com/a/b", revision: "a".repeat(40) });
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
   it("verifies artifact bytes before exposing them to the filesystem", async () => {
     const originalFetch = globalThis.fetch;
     const body = new TextEncoder().encode("artifact");

@@ -1,16 +1,18 @@
 # GitLeap CLI
 
-The CLI is the first product client for the MVP. It supports login, submission
-of a pinned public GitHub revision, status polling, cancellation, and authorized
-artifact download through the shared tRPC contract.
+The installed `gitleap` binary is the first product client for the MVP. After
+installation, save the API token issued by the web onboarding flow, then use
+`gitleap pull` from a normal terminal. It shows the live ingestion pipeline and
+opens the interactive Skills Explorer only after compilation completes.
 
 Run `gitleap` directly for the interactive terminal console. It provides keyboard-navigable
 authentication, repository submission, and live job status screens while the
 scripted commands remain available for automation.
 
-`gitleap cli` and `gitleap ui` are explicit interactive aliases. The default
-console and the `pull` pipeline require a TTY; use the scripted commands below
-for non-interactive automation.
+`gitleap cli` and `gitleap ui` are development/inspection aliases. The public
+flow is `gitleap auth login <token>` followed by `gitleap pull <github-url>`.
+The pull pipeline requires a TTY; use the scripted commands below for
+non-interactive automation.
 
 The UI contract and design tokens live in [`src/theme.ts`](src/theme.ts) and
 are covered by the terminal navigation tests.
@@ -25,6 +27,13 @@ bun run dev:cli
 Set `GITLEAP_SERVER_URL` when the server is not at `http://localhost:3000`.
 
 ## Authentication
+
+```bash
+gitleap auth login <token>
+```
+
+The token is stored in the mode-600 session file and sent only as an HTTPS
+Bearer credential. Email/password login remains available for local development:
 
 ```bash
 GITLEAP_EMAIL=you@example.com GITLEAP_PASSWORD='password' \
@@ -44,10 +53,10 @@ bun run dev:cli -- download <job-id> --output ./artifacts/job.tar.gz
 bun run dev:cli -- run https://github.com/org/repo --revision <commit-sha>
 ```
 
-`run` submits and polls until a terminal state. `pull` opens the interactive
-pipeline, sends `HEAD` by default, and exits non-zero unless the job reaches
-`ready`; the server resolves `HEAD` to an immutable commit before processing.
-Neither command downloads automatically.
+`pull` submits, shows the live pipeline, and opens the dashboard when ready. It
+sends `HEAD` by default; the server resolves it to an immutable commit before
+processing. `run` submits and polls without the dashboard. Both exit non-zero
+unless the job reaches `ready`; neither downloads automatically.
 Use `download` after a ready result.
 
 ## Build
