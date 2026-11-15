@@ -26,7 +26,7 @@ description: Provides architecture guidance for multi-tenant SaaS platforms on C
 
 - Pick one platform and commit; never mix hosting (hybrid routing complexity compounds).
 - Load only the chosen platform's references unless explicitly comparing.
-- Load [psl.md](references/psl.md) when deciding domain strategy (step 1).
+- Load [psl.md](references/psl.md) when deciding domain strategy (step 1), and [psl-readiness.md](references/psl-readiness.md) before recommending any PSL submission.
 - Load [limits-and-quotas.md](references/limits-and-quotas.md) before mapping limits to pricing (step 8).
 - `agents/openai.yaml` is launcher metadata for external runners only; do not load it in normal use.
 
@@ -51,8 +51,7 @@ Multi-tenant progress:
 1. Choose domain strategy
 - Dedicated tenant domain, separate from the brand domain, for all subdomains and custom hostnames. Reputation does not isolate: a phishing site on `random.acme.com` damages the whole domain.
 - Register a separate TLD for tenant workloads (e.g. `acme.app` for tenants, `acme.com` for brand).
-- Untrusted content on sibling subdomains: choose PSL submission, record owner plus timeline. Otherwise record `No PSL` with the cookie-isolation reason. See [psl.md](references/psl.md).
-- Start PSL early; review takes weeks.
+- Untrusted content on sibling subdomains: ship interim cookie controls now and run [psl-readiness.md](references/psl-readiness.md). Choose PSL submission only when the platform is live, already serves thousands of distinct users on the tenant suffix, and passes every hard blocker; otherwise record `Defer` with the failed gate. Without untrusted sibling content, record `No PSL` with the cookie-isolation reason. See [psl.md](references/psl.md).
 
 2. Choose tenant identification strategy (pick one primary; offer custom domain as upgrade path)
 - **Subdomain-based**: `tenant.yourdomain.com`. Requires wildcard DNS. Simplest at scale.
@@ -118,8 +117,8 @@ Multi-tenant progress:
 - Tenant domain:
 - Tenant subdomains:
 - Custom domains:
-- PSL decision: Submit | No PSL
-- PSL owner/timeline or No PSL reason:
+- PSL decision: Submit | Defer | No PSL
+- PSL owner, Defer gate and revisit condition, or No PSL reason:
 
 ## Routing matrix
 | Host pattern | Resolver | Destination | Unknown tenant behavior |
@@ -155,7 +154,7 @@ Multi-tenant progress:
 ## Pre-commit checklist
 
 - [ ] Platform chosen with documented rationale
-- [ ] Tenant workloads off the brand domain; PSL decision and timeline set
+- [ ] Tenant workloads off the brand domain; PSL decision recorded, and Submit only if the readiness gate passed
 - [ ] Tenant identification strategy chosen; custom-domain upgrade path defined
 - [ ] Isolation model defined: per-tenant Workers (Cloudflare) or shared-app plus RLS (Vercel)
 - [ ] Routing authoritative and tenant-blind; dispatch or Middleware handles all traffic
